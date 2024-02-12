@@ -1,0 +1,58 @@
+name: monkey_mon
+description: "A example Flutter project where you can interact with Monkey"
+
+# Prevent accidental publishing to pub.dev.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Drift
+  drift: ^2.15.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.0
+  path: ^1.8.3
+
+  # Riverpod
+  flutter_riverpod: ^2.4.10
+  riverpod_annotation: ^2.3.4
+
+  # Freezed
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+
+  # Utils
+  internet_connection_checker_plus: ^2.2.0
+  mocktail: ^1.0.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.8
+  flutter_lints: ^3.0.1
+  # Drift
+  drift_dev: ^2.15.0
+  # Riverpod
+  custom_lint:
+  riverpod_generator: ^2.3.11
+  riverpod_lint: ^2.3.9
+  freezed: ^2.4.7
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
