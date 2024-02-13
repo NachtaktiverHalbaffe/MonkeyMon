@@ -175,3 +175,147 @@ SingleSpecies generateSingleSpecies() {
     characteristics: species.characteristics,
   );
 }
+
+Map<String, dynamic> generateMonkeyApiAllMonkeys() {
+  return {
+    "content": [
+      {
+        "id": 1,
+        "name": "Panferno",
+        "known_from": "Pokemon",
+        "description":
+            "Dieses mächtige Pokémon hat ein erhabenes Antlitz. Im Kampf hüllt es sich in Flammen und seine Bewegungen gleichen eine Tanz – ein wahrhaft unvergesslicher Anblick!",
+        "strength": "Offensive",
+        "weaknesses": "Wasser",
+        "attack": 191,
+        "defense": 132,
+        "special_attack": 191,
+        "special_defense": 132,
+        "speed": 198,
+        "health_points": 262,
+        "image": "http://localhost:8080/api/v1/imagepool/392.png",
+        "species_name": "Orang-utan",
+        "species_content": {
+          "name": "Orang-utan",
+          "taxonomy": {
+            "genus": "Pongo",
+            "class": "Mammalia",
+            "family": "Hominidae",
+            "order": "Primates",
+            "scientific_name":
+                "Pongo pygmaeus, Pongo abelii, Pongo tapanuliensis",
+            "kingdom": "Animalia",
+            "phylum": "Chordata"
+          },
+          "locations": ["Asia"],
+          "characteristics": {
+            "prey": "Fruits, Bark, Insects",
+            "habitat": "Lowland tropical forest",
+            "number_of_species": "3",
+            "height": "1.25m - 1.5m (4ft - 5ft)",
+            "group_behavior": "Solitary",
+            "estimated_population_size": "20,000",
+            "weight": "30kg - 90kg (66lbs - 200lbs)",
+            "color": "BrownGreyRedBlackOrange",
+            "most_distinctive_feature": "Red hair and longer arms than legs",
+            "lifestyle": "Diurnal",
+            "location": "Borneo and Sumatra",
+            "lifespan": "30 - 40 years",
+            "age_of_sexual_maturity": "12 - 15 years",
+            "age_of_weaning": "3 years",
+            "common_name": "Orang-utan",
+            "name_of_young": "Infant",
+            "predators": "Human, Tiger, Clouded Leopard",
+            "other_name(s)": "Red Ape, Forest Person",
+            "gestation_period": "9 months",
+            "group": "Mammal",
+            "biggest_threat": "Hunting and Habitat Loss",
+            "slogan": "Shares 97% of its DNA with humans!",
+            "skin_type": "Hair",
+            "top_speed": "2.7 mph",
+            "diet": "Omnivore",
+            "average_litter_size": "1"
+          }
+        }
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 20,
+      "sort": {"empty": true, "unsorted": true, "sorted": false},
+      "offset": 0,
+      "paged": true,
+      "unpaged": false
+    },
+    "totalPages": 1,
+    "totalElements": 1,
+    "last": true,
+    "size": 20,
+    "number": 0,
+    "sort": {"empty": true, "unsorted": true, "sorted": false},
+    "numberOfElements": 1,
+    "first": true,
+    "empty": false
+  };
+}
+
+Map<String, dynamic> generateMonkeyApiOneMonkey() {
+  return {
+    "id": 1,
+    "name": "Panferno",
+    "known_from": "Pokemon",
+    "description":
+        "Dieses mächtige Pokémon hat ein erhabenes Antlitz. Im Kampf hüllt es sich in Flammen und seine Bewegungen gleichen eine Tanz – ein wahrhaft unvergesslicher Anblick!",
+    "strength": "Offensive",
+    "weaknesses": "Wasser",
+    "attack": 191,
+    "defense": 132,
+    "special_attack": 191,
+    "special_defense": 132,
+    "speed": 198,
+    "health_points": 262,
+    "image": "http://localhost:8080/api/v1/imagepool/392.png",
+    "species_name": "Orang-utan",
+    "species_content": {
+      "name": "Orang-utan",
+      "taxonomy": {
+        "genus": "Pongo",
+        "class": "Mammalia",
+        "family": "Hominidae",
+        "order": "Primates",
+        "scientific_name": "Pongo pygmaeus, Pongo abelii, Pongo tapanuliensis",
+        "kingdom": "Animalia",
+        "phylum": "Chordata"
+      },
+      "locations": ["Asia"],
+      "characteristics": {
+        "prey": "Fruits, Bark, Insects",
+        "habitat": "Lowland tropical forest",
+        "number_of_species": "3",
+        "height": "1.25m - 1.5m (4ft - 5ft)",
+        "group_behavior": "Solitary",
+        "estimated_population_size": "20,000",
+        "weight": "30kg - 90kg (66lbs - 200lbs)",
+        "color": "BrownGreyRedBlackOrange",
+        "most_distinctive_feature": "Red hair and longer arms than legs",
+        "lifestyle": "Diurnal",
+        "location": "Borneo and Sumatra",
+        "lifespan": "30 - 40 years",
+        "age_of_sexual_maturity": "12 - 15 years",
+        "age_of_weaning": "3 years",
+        "common_name": "Orang-utan",
+        "name_of_young": "Infant",
+        "predators": "Human, Tiger, Clouded Leopard",
+        "other_name(s)": "Red Ape, Forest Person",
+        "gestation_period": "9 months",
+        "group": "Mammal",
+        "biggest_threat": "Hunting and Habitat Loss",
+        "slogan": "Shares 97% of its DNA with humans!",
+        "skin_type": "Hair",
+        "top_speed": "2.7 mph",
+        "diet": "Omnivore",
+        "average_litter_size": "1"
+      }
+    }
+  };
+}
