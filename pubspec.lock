@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.9.0"
+  cancellation_token:
+    dependency: "direct main"
+    description:
+      name: cancellation_token
+      sha256: ad95acf9d4b2f3563e25dc937f63587e46a70ce534e910b65d10e115490f1027
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   characters:
     dependency: transitive
     description:
@@ -398,13 +406,13 @@ packages:
     source: hosted
     version: "4.1.0"
   http:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: http
-      sha256: a2bbf9d017fcced29139daa8ed2bba4ece450ab222871df93ca9eec6f80c34ba
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "0.13.6"
   http_mock_adapter:
     dependency: "direct dev"
     description:
@@ -534,7 +542,7 @@ packages:
     source: hosted
     version: "1.0.5"
   mocktail:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: mocktail
       sha256: c4b5007d91ca4f67256e720cb1b6d704e79a510183a12fa551021f652577dce6
@@ -637,6 +645,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pokedex:
+    dependency: "direct main"
+    description:
+      name: pokedex
+      sha256: "360ccb4f2a67685ed3b9cc0ec35a90232a9f4db99a402c86b495ca338303c63e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   pool:
     dependency: transitive
     description:
