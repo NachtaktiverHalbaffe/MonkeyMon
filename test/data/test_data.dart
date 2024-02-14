@@ -176,6 +176,29 @@ SingleSpecies generateSingleSpecies() {
   );
 }
 
+Map<String, dynamic> generateMonkeyApiAllMonkeysEmpty() {
+  return {
+    "content": [],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 20,
+      "sort": {"empty": true, "unsorted": true, "sorted": false},
+      "offset": 0,
+      "paged": true,
+      "unpaged": false
+    },
+    "totalPages": 0,
+    "totalElements": 0,
+    "last": true,
+    "size": 20,
+    "number": 0,
+    "sort": {"empty": true, "unsorted": true, "sorted": false},
+    "numberOfElements": 0,
+    "first": true,
+    "empty": true
+  };
+}
+
 Map<String, dynamic> generateMonkeyApiAllMonkeys() {
   return {
     "content": [

@@ -31,8 +31,7 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
     try {
       response = await performGet("/monkeys");
       if (response.data == null) {
-        throw NetworkExcpetion("Didnt get any data",
-            type: NetworkExceptionType.badResponse);
+        return (List<Monkey>.empty(), List<SingleSpecies>.empty());
       }
     } on NetworkExcpetion {
       rethrow;
@@ -48,7 +47,7 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
     return (monkeys, species);
   }
 
-  Future<(Monkey, SingleSpecies)> getMonkey(int id) async {
+  Future<(Monkey?, SingleSpecies?)> getMonkey(int id) async {
     Monkey monkey;
     SingleSpecies species;
 
@@ -56,14 +55,17 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
     try {
       response = await performGet("/monkeys/$id");
       if (response.data == null) {
-        throw NetworkExcpetion("Didnt get any data",
-            type: NetworkExceptionType.badResponse);
+        return (null, null);
       }
     } on NetworkExcpetion {
       rethrow;
     }
 
     var responseJson = json.decode(response.data!);
+
+    if (responseJson["id"] == null) {
+      return (null, null);
+    }
 
     monkey = _parseToMonkey(responseJson);
     species = _parseToSpecies(responseJson);

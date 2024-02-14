@@ -42,4 +42,24 @@ class SpeciesMapper {
 
     return list;
   }
+
+  static SpeciesCompanion mapToCompanion(SingleSpecies species) {
+    return SpeciesCompanion(
+      name: Value<String>(species.name),
+      taxonomy: Value<Map<String, String>?>(species.taxonomy),
+      locations: Value<List<String>?>(species.locations),
+      characteristics: Value<Map<String, String>?>(species.characteristics),
+    );
+  }
+
+  static List<SpeciesCompanion> mapToCompanionList(
+      List<SingleSpecies> species) {
+    List<SpeciesCompanion> companions = List.empty(growable: true);
+
+    for (int i = 0; i < species.length; i++) {
+      companions.add(mapToCompanion(species[i]));
+    }
+
+    return companions;
+  }
 }

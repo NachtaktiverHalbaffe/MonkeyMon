@@ -59,7 +59,7 @@ void main() {
         testElementMonkey
       ];
       final SpeciesDto testElementSpecies = generateSpeciesDto();
-      final List<SpeciesDto?>? testDataSpecies = [
+      final List<SpeciesDto> testDataSpecies = [
         testElementSpecies,
         testElementSpecies
       ];
@@ -79,7 +79,7 @@ void main() {
         testElementMonkey
       ];
       final SpeciesDto testElementSpecies = generateSpeciesDto();
-      final List<SpeciesDto?>? testDataSpecies = [
+      final List<SpeciesDto> testDataSpecies = [
         testElementSpecies,
         testElementSpecies,
         testElementSpecies
@@ -106,7 +106,7 @@ void main() {
         testElementMonkey
       ];
       final SpeciesDto testElementSpecies = generateSpeciesDto();
-      final List<SpeciesDto?>? testDataSpecies = [
+      final List<SpeciesDto?> testDataSpecies = [
         testElementSpecies,
         null,
         testElementSpecies

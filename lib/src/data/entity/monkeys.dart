@@ -10,17 +10,20 @@ class Monkeys extends Table {
   TextColumn get strength => text().nullable()();
   TextColumn get weaknesses => text().nullable()();
   IntColumn get attack =>
-      integer().check(attack.isBiggerOrEqual(Constant(0))).nullable()();
+      integer().check(attack.isBiggerOrEqual(const Constant(0))).nullable()();
   IntColumn get defense =>
-      integer().check(defense.isBiggerOrEqual(Constant(0))).nullable()();
-  IntColumn get specialAttack =>
-      integer().check(specialAttack.isBiggerOrEqual(Constant(0))).nullable()();
-  IntColumn get specialDefense =>
-      integer().check(specialDefense.isBiggerOrEqual(Constant(0))).nullable()();
+      integer().check(defense.isBiggerOrEqual(const Constant(0))).nullable()();
+  IntColumn get specialAttack => integer()
+      .check(specialAttack.isBiggerOrEqual(const Constant(0)))
+      .nullable()();
+  IntColumn get specialDefense => integer()
+      .check(specialDefense.isBiggerOrEqual(const Constant(0)))
+      .nullable()();
   IntColumn get speed =>
-      integer().check(speed.isBiggerOrEqual(Constant(0))).nullable()();
-  IntColumn get healthPoints =>
-      integer().check(healthPoints.isBiggerOrEqual(Constant(0))).nullable()();
+      integer().check(speed.isBiggerOrEqual(const Constant(0))).nullable()();
+  IntColumn get healthPoints => integer()
+      .check(healthPoints.isBiggerOrEqual(const Constant(0)))
+      .nullable()();
   TextColumn get species => text().nullable().references(Species, #name)();
 
   @override

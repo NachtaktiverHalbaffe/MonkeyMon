@@ -1,4 +1,5 @@
 import 'package:monkey_mon/src/core/utils/internet_connection_checker.dart';
+import 'package:monkey_mon/src/data/datasources/monkeys_remote_datasource.dart';
 import 'package:monkey_mon/src/data/mapper/species_mapper.dart';
 import 'package:monkey_mon/src/domain/repository/monkey_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,13 +18,13 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
   late final AppDatabase database = ref.read(db.databaseProvider);
   late final InternetConnectionChecker internetConnectionChecker =
       ref.read(internetConnectionCheckerProvider.notifier);
+  late final MonkeysRemoteDatasource remoteDatasource =
+      ref.read(monkeyRemoteDatasourceProvider);
 
   @override
   Future<List<MonkeyDto>> build() async {
     return getAllMonkeys();
   }
-
-  // TODO Check internet connection and connect rest databases
 
   @override
   Future<MonkeyDto?> createMonkey(
@@ -56,11 +57,29 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
   @override
   Future<List<MonkeyDto>> getAllMonkeys() async {
-    final List<Monkey> monkeys = await database.monkeysDao.getAllMonkeys();
+    List<Monkey> monkeys = await database.monkeysDao.getAllMonkeys();
 
     if (monkeys.isEmpty && await internetConnectionChecker.isConnected()) {
-      // TODO Fetch remote api
-      throw UnimplementedError();
+      List<SingleSpecies> species = List.empty(growable: true);
+      try {
+        (monkeys, species) = await remoteDatasource.getAllMonkeys();
+      } on Exception {
+        return List.empty();
+      }
+
+      List<MonkeysCompanion> monkeyCompanions =
+          MonkeyMapper.mapToCompanionList(monkeys);
+      List<SpeciesCompanion> speciesCompanions =
+          SpeciesMapper.mapToCompanionList(species);
+
+      // Caching
+      for (int i = 0; i < monkeyCompanions.length; i++) {
+        await database.createMonkeyWithSpeciesInformation(
+            monkeyCompanions[i], speciesCompanions[i]);
+      }
+
+      return MonkeyMapper.mapToDtoList(monkeys,
+          species: SpeciesMapper.mapToDtoList(species));
     }
 
     return MonkeyMapper.mapToDtoList(monkeys);
@@ -68,17 +87,34 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
   @override
   Future<MonkeyDto?> getMonkey(int id) async {
-    final Monkey? monkey = await database.monkeysDao.getMonkey(id);
+    Monkey? monkey = await database.monkeysDao.getMonkey(id);
 
     if (monkey == null) {
       if (await internetConnectionChecker.isConnected()) {
-        throw UnimplementedError();
+        SingleSpecies? species;
+
+        try {
+          (monkey, species) = await remoteDatasource.getMonkey(id);
+        } on Exception {
+          return null;
+        }
+
+        if (monkey != null && species != null) {
+          await database.createMonkeyWithSpeciesInformation(
+              MonkeyMapper.mapToCompanion(monkey),
+              SpeciesMapper.mapToCompanion(species));
+        } else {
+          return null;
+        }
+
+        return MonkeyMapper.mapToDto(monkey,
+            species: SpeciesMapper.mapToDto(species));
       } else {
+        // No result and no internet connection
         return null;
       }
-    } else {
-      return MonkeyMapper.mapToDto(monkey);
     }
+    return MonkeyMapper.mapToDto(monkey);
   }
 
   @override

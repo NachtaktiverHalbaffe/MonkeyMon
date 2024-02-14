@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:monkey_mon/src/core/utils/internet_connection_checker.dart';
 import 'package:monkey_mon/src/data/datasources/app_database.dart';
+import 'package:monkey_mon/src/data/datasources/monkeys_remote_datasource.dart';
 import 'package:monkey_mon/src/data/repository/monkey_repository_impl.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/model/species_dto.dart';
@@ -13,16 +14,20 @@ import '../test_data.dart';
 
 class MockAppDatabase extends Mock implements AppDatabase {}
 
+class MockRemoteDatasource extends Mock implements MonkeysRemoteDatasource {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase mockAppDatabase;
   late MockInternetChecker mockInternetChecker;
+  late MockRemoteDatasource mockRemoteDatasource;
 
   late MonkeyRepositoryImpl sut;
 
   setUp(() {
     mockAppDatabase = AppDatabase(testingEngine: NativeDatabase.memory());
     mockInternetChecker = MockInternetChecker();
+    mockRemoteDatasource = MockRemoteDatasource();
   });
 
   setUpAll(() {
@@ -161,21 +166,48 @@ void main() {
     test(
         'When a monkey doesnt exist, a monkey is pulled from a REST-API when connected to the internet',
         () async {
+      final MonkeyDto expectedResult = generateMonkeyDtoWithSpeciesData();
+
       when(() => mockInternetChecker.isConnected())
           .thenAnswer((_) => Future.value(true));
+      when(() => mockRemoteDatasource.getMonkey(any())).thenAnswer((_) =>
+          Future.value(
+              (generateMonkeyWithSpeciesData(), generateSingleSpecies())));
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
         internetConnectionCheckerProvider
-            .overrideWith(() => mockInternetChecker)
+            .overrideWith(() => mockInternetChecker),
+        monkeyRemoteDatasourceProvider
+            .overrideWith((ref) => mockRemoteDatasource)
       ]);
       sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
-      // TODO mock rest api
+      final MonkeyDto? result = await sut.getMonkey(testData.id);
+
+      expect(result, expectedResult);
+    });
+
+    test(
+        """When a monkey doesnt exist, a monkey is pulled from a REST-API when connected to the internet. The api returns an empty response 
+        so the repository should return null values""", () async {
+      when(() => mockInternetChecker.isConnected())
+          .thenAnswer((_) => Future.value(true));
+      when(() => mockRemoteDatasource.getMonkey(any()))
+          .thenAnswer((_) => Future.value((null, null)));
+      final testContainer = createContainer(overrides: [
+        databaseProvider.overrideWith((ref) => mockAppDatabase),
+        internetConnectionCheckerProvider
+            .overrideWith(() => mockInternetChecker),
+        monkeyRemoteDatasourceProvider
+            .overrideWith((ref) => mockRemoteDatasource)
+      ]);
+      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      final MonkeyDto testData = generateMonkeyDto();
 
       final MonkeyDto? result = await sut.getMonkey(testData.id);
 
-      expect(result, isNull);
+      expect(result, null);
     });
   });
 
@@ -221,12 +253,45 @@ void main() {
         """When there are no entries in the db and theres a internet connection,
          it calls an REST-API to fetch data and returns this as list""",
         () async {
+      final Monkey restElementMonkey = generateMonkeyWithSpeciesData();
+      final SingleSpecies restElementSpecies = generateSingleSpecies();
+
       when(() => mockInternetChecker.isConnected())
           .thenAnswer((_) => Future.value(true));
+      when(() => mockRemoteDatasource.getAllMonkeys())
+          .thenAnswer((_) => Future.value((
+                [restElementMonkey, restElementMonkey, restElementMonkey],
+                [restElementSpecies, restElementSpecies, restElementSpecies]
+              )));
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
         internetConnectionCheckerProvider
-            .overrideWith(() => mockInternetChecker)
+            .overrideWith(() => mockInternetChecker),
+        monkeyRemoteDatasourceProvider
+            .overrideWith((ref) => mockRemoteDatasource)
+      ]);
+      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+
+      final List<MonkeyDto> result = await sut.getAllMonkeys();
+
+      expect(result.length, greaterThanOrEqualTo(3));
+      expect(result[0], generateMonkeyDtoWithSpeciesData());
+    });
+
+    test(
+        """When there are no entries in the db and theres a internet connection,
+         it calls an REST-API to fetch data which returns no dara so it returns an empty list""",
+        () async {
+      when(() => mockInternetChecker.isConnected())
+          .thenAnswer((_) => Future.value(true));
+      when(() => mockRemoteDatasource.getAllMonkeys()).thenAnswer((_) =>
+          Future.value((List<Monkey>.empty(), List<SingleSpecies>.empty())));
+      final testContainer = createContainer(overrides: [
+        databaseProvider.overrideWith((ref) => mockAppDatabase),
+        internetConnectionCheckerProvider
+            .overrideWith(() => mockInternetChecker),
+        monkeyRemoteDatasourceProvider
+            .overrideWith((ref) => mockRemoteDatasource)
       ]);
       sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
 

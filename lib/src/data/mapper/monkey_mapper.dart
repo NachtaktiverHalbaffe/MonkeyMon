@@ -94,4 +94,31 @@ class MonkeyMapper {
       MonkeyDto monkeyDto, SpeciesDto speciesDto) {
     return monkeyDto.copyWith(species: speciesDto);
   }
+
+  static MonkeysCompanion mapToCompanion(Monkey monkey) {
+    return MonkeysCompanion(
+        id: Value<int>(monkey.id),
+        name: Value<String>(monkey.name),
+        knownFrom: Value<String?>(monkey.knownFrom),
+        description: Value<String?>(monkey.description),
+        strength: Value<String?>(monkey.strength),
+        weaknesses: Value<String?>(monkey.weaknesses),
+        attack: Value<int?>(monkey.attack),
+        defense: Value<int?>(monkey.defense),
+        specialAttack: Value<int?>(monkey.specialAttack),
+        specialDefense: Value<int?>(monkey.specialDefense),
+        speed: Value<int?>(monkey.speed),
+        healthPoints: Value<int?>(monkey.healthPoints),
+        species: Value<String?>(monkey.species));
+  }
+
+  static List<MonkeysCompanion> mapToCompanionList(List<Monkey> monkeys) {
+    List<MonkeysCompanion> companions = List.empty(growable: true);
+
+    for (int i = 0; i < monkeys.length; i++) {
+      companions.add(mapToCompanion(monkeys[i]));
+    }
+
+    return companions;
+  }
 }

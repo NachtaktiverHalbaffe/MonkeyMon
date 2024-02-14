@@ -68,6 +68,24 @@ void main() {
           expectedResult["content"][0]["species_content"]["characteristics"]);
     });
 
+    test('a valid request which responds with no data returns a empty list',
+        () async {
+      dioAdapter.onGet(
+        "/monkeys",
+        (server) {
+          server.reply(
+            200,
+            generateMonkeyApiAllMonkeysEmpty(),
+          );
+        },
+        data: Matchers.any,
+      );
+      var (monkeys, species) = await sut.getAllMonkeys();
+
+      expect(monkeys.length, 0);
+      expect(species.length, 0);
+    });
+
     test(
         'when the server doesnt respond, the requests times out and a exception is thrown',
         () async {
@@ -113,8 +131,8 @@ void main() {
         data: Matchers.any,
       );
       var (monkey, species) = await sut.getMonkey(expectedResult["id"]);
-
-      expect(monkey.id, expectedResult["id"]);
+      expect(monkey, isNotNull);
+      expect(monkey!.id, expectedResult["id"]);
       expect(monkey.name, expectedResult["name"]);
       expect(monkey.knownFrom, expectedResult["known_from"]);
       expect(monkey.description, expectedResult["description"]);
@@ -127,11 +145,28 @@ void main() {
       expect(monkey.speed, expectedResult["speed"]);
       expect(monkey.healthPoints, expectedResult["health_points"]);
 
-      expect(species.name, expectedResult["species_content"]["name"]);
+      expect(species, isNotNull);
+      expect(species!.name, expectedResult["species_content"]["name"]);
       expect(species.taxonomy, expectedResult["species_content"]["taxonomy"]);
       expect(species.locations, expectedResult["species_content"]["locations"]);
       expect(species.characteristics,
           expectedResult["species_content"]["characteristics"]);
+    });
+
+    test('a valid request which gets no data returns a null value', () async {
+      dioAdapter.onGet(
+        "/monkeys/1",
+        (server) {
+          server.reply(
+            200,
+            {},
+          );
+        },
+        data: Matchers.any,
+      );
+      var (monkey, species) = await sut.getMonkey(1);
+      expect(monkey, isNull);
+      expect(species, isNull);
     });
 
     test(
