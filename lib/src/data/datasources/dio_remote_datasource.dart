@@ -6,28 +6,22 @@ abstract class DioRemoteDatasource {
   late final Dio dio;
 
   DioRemoteDatasource(
-      {required String baseUrl, Map<String, dynamic>? headers}) {
+      {required String baseUrl,
+      Map<String, dynamic>? headers,
+      Duration? sendTimeout,
+      Duration? connectTimeout,
+      Duration? receiveTimeout}) {
     dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      headers: headers,
-    ));
+        baseUrl: baseUrl,
+        headers: headers,
+        sendTimeout: sendTimeout,
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout));
 
     initializeInterceptors();
   }
 
   void initializeInterceptors() {
-    // dio.interceptors.add(InterceptorsWrapper(
-    //   onError: (error, handler) {
-    //     print(error.message);
-    //   },
-    //   onRequest: (options, handler) {
-    //     print("Request Uri: ${options.uri}");
-    //   },
-    //   onResponse: (response, handler) {
-    //     print("Response: ${response.data}");
-    //   },
-    // ));
-
     dio.interceptors.add(
       TalkerDioLogger(
         settings: const TalkerDioLoggerSettings(
@@ -46,7 +40,6 @@ abstract class DioRemoteDatasource {
     try {
       response = await dio.get(endPoint);
     } on DioException catch (e) {
-      print(e);
       switch (e.type) {
         case DioExceptionType.connectionTimeout ||
               DioExceptionType.receiveTimeout ||
@@ -57,17 +50,14 @@ abstract class DioRemoteDatasource {
               DioExceptionType.cancel:
           throw NetworkExcpetion(e.message,
               type: NetworkExceptionType.connectionError);
+        case DioExceptionType.badResponse:
+          throw NetworkExcpetion(e.message,
+              type: NetworkExceptionType.badResponse);
         default:
           throw NetworkExcpetion(e.message, type: NetworkExceptionType.unknown);
       }
     }
 
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      throw NetworkExcpetion(
-          "Wrong statuscode (expected 200, got ${response.statusCode})",
-          type: NetworkExceptionType.badResponse);
-    }
+    return response;
   }
 }

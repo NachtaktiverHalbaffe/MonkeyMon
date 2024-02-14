@@ -4,11 +4,24 @@ import 'package:dio/dio.dart';
 import 'package:monkey_mon/src/data/datasources/app_database.dart';
 import 'package:monkey_mon/src/data/datasources/dio_remote_datasource.dart';
 import 'package:monkey_mon/src/exceptions/network_exception.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+final monkeyRemoteDatasourceProvider = Provider<MonkeysRemoteDatasource>(
+  (ref) => MonkeysRemoteDatasource(),
+);
 
 class MonkeysRemoteDatasource extends DioRemoteDatasource {
   static String get apiBaseUrl => "http://10.0.2.2:8080/api/v1/";
+  static Duration get sendTimeout => const Duration(seconds: 2);
+  static Duration get connectTimeout => const Duration(seconds: 10);
+  static Duration get receiveTimeout => const Duration(seconds: 2);
 
-  MonkeysRemoteDatasource({super.headers}) : super(baseUrl: apiBaseUrl);
+  MonkeysRemoteDatasource({super.headers})
+      : super(
+            baseUrl: apiBaseUrl,
+            sendTimeout: sendTimeout,
+            connectTimeout: connectTimeout,
+            receiveTimeout: receiveTimeout);
 
   Future<(List<Monkey>, List<SingleSpecies>)> getAllMonkeys() async {
     List<Monkey> monkeys = List.empty(growable: true);
