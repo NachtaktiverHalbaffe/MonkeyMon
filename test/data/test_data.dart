@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:monkey_mon/src/data/datasources/app_database.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
+import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/domain/model/species_dto.dart';
 
 MonkeyDto generateMonkeyDto() {
@@ -341,4 +342,62 @@ Map<String, dynamic> generateMonkeyApiOneMonkey() {
       }
     }
   };
+}
+
+PokemonDto generatePokemonDto() {
+  return const PokemonDto(
+    id: 392,
+    name: "Panferno",
+    description:
+        "Seine Krone aus Feuer ist Zeichen seines feurigen Wesens. Niemand ist schneller im Kampf als dieses Pokémon.",
+    attack: 104,
+    hp: 76,
+    defense: 71,
+    specialAttack: 104,
+    specialDefense: 71,
+    speed: 108,
+    types: ["fire", "fighting"] as List<String>,
+    sprites: PokemonSprites(
+      frontDefault:
+          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/392.png",
+      frontShiny:
+          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/392.png",
+      backDefault:
+          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/392.png",
+      backShiny:
+          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/392.png",
+    ),
+  );
+}
+
+Pokemon generatePokemon() {
+  final pokemonDto = generatePokemonDto();
+  return Pokemon(
+      id: pokemonDto.id,
+      name: pokemonDto.name,
+      description: pokemonDto.description,
+      attack: pokemonDto.attack,
+      defense: pokemonDto.defense,
+      specialAttack: pokemonDto.specialAttack,
+      specialDefense: pokemonDto.specialDefense,
+      speed: pokemonDto.speed,
+      hp: pokemonDto.hp,
+      types: pokemonDto.types,
+      sprites: pokemonDto.sprites);
+}
+
+PokemonsCompanion generatePokemonCompanion() {
+  final pokemonDto = generatePokemonDto();
+  return PokemonsCompanion(
+      id: Value<int>(pokemonDto.id),
+      name: Value<String>(pokemonDto.name),
+      description: Value<String?>(pokemonDto.description),
+      attack: Value<int>(pokemonDto.attack),
+      defense: Value<int>(pokemonDto.defense),
+      specialAttack: Value<int>(pokemonDto.specialAttack),
+      specialDefense: Value<int>(pokemonDto.specialDefense),
+      speed: Value<int>(pokemonDto.speed),
+      hp: Value<int>(pokemonDto.hp),
+      types: Value<List<String>>(pokemonDto.types),
+      sprites: Value<PokemonSprites?>(pokemonDto.sprites));
 }
