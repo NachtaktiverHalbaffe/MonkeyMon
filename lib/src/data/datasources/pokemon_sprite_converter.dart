@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
-import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
+
+import '../../domain/model/pokemon_dto.dart';
 
 class PokemonSpriteConverter extends TypeConverter<PokemonSprites, String> {
-  const PokemonSpriteConverter();
-
   @override
   PokemonSprites fromSql(String fromDb) {
     return PokemonSprites.fromJson(json.decode(fromDb));

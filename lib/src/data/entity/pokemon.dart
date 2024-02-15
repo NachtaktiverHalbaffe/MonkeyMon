@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:monkey_mon/src/data/datasources/listconverter.dart';
-import 'package:monkey_mon/src/data/datasources/pokemon_sprite_converter.dart';
+import '../datasources/listconverter.dart';
+import '../datasources/pokemon_sprite_converter.dart';
 
 class Pokemons extends Table {
   IntColumn get id => integer()();
@@ -18,8 +18,7 @@ class Pokemons extends Table {
       integer().check(speed.isBiggerOrEqual(const Constant(0)))();
   IntColumn get hp => integer().check(hp.isBiggerOrEqual(const Constant(0)))();
   TextColumn get types => text().map(ListTypeConverter<String>())();
-  TextColumn get sprites =>
-      text().map(const PokemonSpriteConverter()).nullable()();
+  TextColumn get sprites => text().map(PokemonSpriteConverter()).nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

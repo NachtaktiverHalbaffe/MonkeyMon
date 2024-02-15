@@ -6,11 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:monkey_mon/src/data/datasources/monkeys_dao.dart';
 import 'package:monkey_mon/src/data/datasources/pokemon_dao.dart';
 import 'package:monkey_mon/src/data/datasources/species_dao.dart';
+import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../domain/model/pokemon_dto.dart';
 
 /// It is important to import entities with this notation style, otherwise build_runner will fail
 import '../entity/monkeys.dart';
