@@ -29,6 +29,10 @@ class InternetConnectionChecker extends _$InternetConnectionChecker {
     return await InternetConnection().hasInternetAccess;
   }
 
+  Future<void> stopListening() async {
+    await listener.cancel();
+  }
+
   Future<bool> isConnected() async {
     return await InternetConnection().hasInternetAccess;
   }
