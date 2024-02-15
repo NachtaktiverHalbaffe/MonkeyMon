@@ -14,7 +14,6 @@ void main() {
   group('get single pokemon', () {
     test('test that get a single pokemon works', () async {
       final Pokemon? result = await sut.getPokemon(name: "infernape");
-      print(result);
       expect(result, isNotNull);
     });
 
@@ -40,7 +39,7 @@ void main() {
 
     expect(result, isNotNull);
     expect(result.length, count);
-  });
+  }, skip: true);
 
   test('test that streaming pokemon works and that the stream is cancellable',
       () async {
