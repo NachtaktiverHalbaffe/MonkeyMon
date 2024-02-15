@@ -12,8 +12,6 @@ import 'package:monkey_mon/src/domain/model/species_dto.dart';
 import '../../riverpod_textcontainer.dart';
 import '../test_data.dart';
 
-class MockAppDatabase extends Mock implements AppDatabase {}
-
 class MockRemoteDatasource extends Mock implements MonkeysRemoteDatasource {}
 
 void main() {

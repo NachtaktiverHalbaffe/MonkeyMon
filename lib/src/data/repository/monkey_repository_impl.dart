@@ -3,11 +3,10 @@ import 'package:monkey_mon/src/data/datasources/monkeys_remote_datasource.dart';
 import 'package:monkey_mon/src/data/mapper/species_mapper.dart';
 import 'package:monkey_mon/src/domain/repository/monkey_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import "package:monkey_mon/src/data/datasources/app_database.dart" as db;
+import "package:monkey_mon/src/data/datasources/app_database.dart";
 
 import '../../domain/model/monkey_dto.dart';
 import '../../domain/model/species_dto.dart';
-import '../datasources/app_database.dart';
 import '../mapper/monkey_mapper.dart';
 
 part "monkey_repository_impl.g.dart";
@@ -15,7 +14,7 @@ part "monkey_repository_impl.g.dart";
 @riverpod
 class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
     implements MonkeyRepository {
-  late final AppDatabase database = ref.read(db.databaseProvider);
+  late final AppDatabase database = ref.read(databaseProvider);
   late final InternetConnectionChecker internetConnectionChecker =
       ref.read(internetConnectionCheckerProvider.notifier);
   late final MonkeysRemoteDatasource remoteDatasource =
