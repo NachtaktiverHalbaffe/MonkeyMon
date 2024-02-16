@@ -14,7 +14,7 @@ class PokedexScreen extends ConsumerWidget {
 
   final CancellationToken cancellationToken = CancellationToken();
   final List<PokemonDto> pokemons = List.empty(growable: true);
-  int currentIndex = 0;
+  final SwiperController _controller = SwiperController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,9 +38,10 @@ class PokedexScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.075),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           pokemons.isNotEmpty
               ? Swiper(
+                  controller: _controller,
                   itemWidth: MediaQuery.of(context).size.width * 0.9,
                   itemHeight: MediaQuery.of(context).size.height * 0.8,
                   itemCount: pokemons.length,
@@ -49,10 +50,9 @@ class PokedexScreen extends ConsumerWidget {
                   autoplay: true,
                   autoplayDisableOnInteraction: true,
                   itemBuilder: (context, index) {
-                    currentIndex = index;
+                    // _controller.index = index;
                     return _card(context, pokemons[index]);
                   },
-                  onIndexChanged: (value) => currentIndex = value,
                   onTap: (index) {
                     Navigator.push<PokedexEntryScreen>(
                         context,
@@ -60,11 +60,12 @@ class PokedexScreen extends ConsumerWidget {
                             builder: (_) => PokedexEntryScreen(
                                 pokemonDto: pokemons[index])));
                   },
+                  onIndexChanged: (value) => _controller.index = value,
                 )
               : Center(),
           SizedBox(height: 12),
           AutoSizeText(
-            "$currentIndex/${pokemons.length}",
+            "${_controller.index}/${pokemons.length}",
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white),
           )
