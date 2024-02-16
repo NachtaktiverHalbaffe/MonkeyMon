@@ -33,7 +33,7 @@ class PokemonEntry extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
           CircleAvatar(
-            backgroundColor: _matchPokemonTypeToColor(pokemonDto.types.first),
+            backgroundColor: Colors.white,
             radius: imageHeight / 2.5,
             child: CachedNetworkImage(
               height: imageHeight,
@@ -47,6 +47,7 @@ class PokemonEntry extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: nameWidgetRow,
             ),
@@ -55,7 +56,7 @@ class PokemonEntry extends StatelessWidget {
           AutoSizeText(
             pokemonDto.description ?? "",
             minFontSize: 15,
-            maxLines: 4,
+            maxLines: 3,
             textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 12),
@@ -66,7 +67,7 @@ class PokemonEntry extends StatelessWidget {
     );
   }
 
-  Color _matchPokemonTypeToColor(String type) {
+  static Color matchPokemonTypeToColor(String type) {
     switch (type.toLowerCase()) {
       case 'normal':
         return const Color(0xFFA7A877);
@@ -156,14 +157,15 @@ class PokemonEntry extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(right: 12),
       child: Chip(
-        elevation: 12.0,
-        side: const BorderSide(style: BorderStyle.none),
+        elevation: 0.0,
+        side: const BorderSide(style: BorderStyle.solid, color: Colors.grey),
+        shadowColor: Colors.black,
         shape: const StadiumBorder(side: BorderSide(style: BorderStyle.none)),
         avatar: Image(
           image: AssetImage("assets/images/$type.png"),
         ),
         label: Text(_translateType(type).capitalize()),
-        backgroundColor: _matchPokemonTypeToColor(type),
+        backgroundColor: matchPokemonTypeToColor(type),
       ),
     );
   }

@@ -28,44 +28,54 @@ class PokedexScreen extends ConsumerWidget {
   }
 
   Widget _swiperWidget(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.075),
-        pokemons.isNotEmpty
-            ? Swiper(
-                itemWidth: MediaQuery.of(context).size.width * 0.9,
-                itemHeight: MediaQuery.of(context).size.height * 0.76,
-                itemCount: pokemons.length,
-                layout: SwiperLayout.TINDER,
-                loop: true,
-                autoplay: true,
-                autoplayDisableOnInteraction: true,
-                itemBuilder: (context, index) {
-                  currentIndex = index;
-                  return _card(context, pokemons[index]);
-                },
-                onIndexChanged: (value) => currentIndex = value,
-                onTap: (index) {
-                  Navigator.push<PokedexEntryScreen>(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              PokedexEntryScreen(pokemonDto: pokemons[index])));
-                },
-              )
-            : Center(),
-        SizedBox(height: 12),
-        AutoSizeText(
-          "$currentIndex/${pokemons.length}",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )
-      ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          alignment: Alignment.topCenter,
+          image: AssetImage("assets/images/pokemon_background.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: MediaQuery.of(context).size.height * 0.075),
+          pokemons.isNotEmpty
+              ? Swiper(
+                  itemWidth: MediaQuery.of(context).size.width * 0.9,
+                  itemHeight: MediaQuery.of(context).size.height * 0.76,
+                  itemCount: pokemons.length,
+                  layout: SwiperLayout.TINDER,
+                  loop: true,
+                  autoplay: true,
+                  autoplayDisableOnInteraction: true,
+                  itemBuilder: (context, index) {
+                    currentIndex = index;
+                    return _card(context, pokemons[index]);
+                  },
+                  onIndexChanged: (value) => currentIndex = value,
+                  onTap: (index) {
+                    Navigator.push<PokedexEntryScreen>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => PokedexEntryScreen(
+                                pokemonDto: pokemons[index])));
+                  },
+                )
+              : Center(),
+          SizedBox(height: 12),
+          AutoSizeText(
+            "$currentIndex/${pokemons.length}",
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white),
+          )
+        ],
+      ),
     );
   }
 
   Widget _card(BuildContext context, PokemonDto pokemonDto) {
     return Card(
-        // color: _matchPokemonTypeToColor(pokemonDto.types.first),
+        color: PokemonEntry.matchPokemonTypeToColor(pokemonDto.types.last),
         margin: const EdgeInsets.only(bottom: 24.0),
         elevation: 8.0,
         child: Stack(
@@ -74,7 +84,11 @@ class PokedexScreen extends ConsumerWidget {
               right: -20,
               bottom: -30,
               child: AnimatedPokeballWidget(
-                  color: Colors.black38,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .color!
+                      .withOpacity(0.3),
                   size: MediaQuery.of(context).size.height * 0.25 * 0.7),
             ),
             PokemonEntry(pokemonDto: pokemonDto),

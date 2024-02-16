@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
             return lightTheme;
           default:
             print(brightness);
-            return ThemeData(brightness: brightness);
+            return darkTheme;
         }
       },
       themedWidgetBuilder: (BuildContext context, ThemeData theme) =>
