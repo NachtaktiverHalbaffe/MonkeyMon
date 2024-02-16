@@ -58,6 +58,7 @@ class BottonNavBar extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
       notchBottomBarController: _controller,
       bottomBarItems: _bottombarItems,
+      bottomBarWidth: MediaQuery.of(context).size.width,
       onTap: onTap,
       kIconSize: 24.0,
       shadowElevation:

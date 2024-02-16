@@ -42,7 +42,7 @@ class PokedexScreen extends ConsumerWidget {
           pokemons.isNotEmpty
               ? Swiper(
                   itemWidth: MediaQuery.of(context).size.width * 0.9,
-                  itemHeight: MediaQuery.of(context).size.height * 0.76,
+                  itemHeight: MediaQuery.of(context).size.height * 0.8,
                   itemCount: pokemons.length,
                   layout: SwiperLayout.TINDER,
                   loop: true,

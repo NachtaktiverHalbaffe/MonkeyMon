@@ -1,14 +1,10 @@
-import 'dart:io';
-
+import 'connection.dart' as impl;
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:flutter/foundation.dart';
 import 'package:monkey_mon/src/data/datasources/monkeys_dao.dart';
 import 'package:monkey_mon/src/data/datasources/pokemon_dao.dart';
 import 'package:monkey_mon/src/data/datasources/species_dao.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 /// It is important to import entities with this notation style, otherwise build_runner will fail
@@ -29,8 +25,9 @@ final databaseProvider = Provider<AppDatabase>(
     tables: [Monkeys, Species, Pokemons],
     daos: [MonkeysDao, SpeciesDao, PokemonsDao])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase({QueryExecutor? testingEngine})
-      : super(testingEngine ?? _openConnection());
+  AppDatabase() : super(impl.connect());
+
+  AppDatabase.forTesting(DatabaseConnection connection) : super(connection);
 
   @override
   int get schemaVersion => 1;
@@ -78,15 +75,4 @@ class AppDatabase extends _$AppDatabase {
 
     return monkey;
   }
-}
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return NativeDatabase.createInBackground(
-      file,
-      // logStatements: kDebugMode,
-    );
-  });
 }

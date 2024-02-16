@@ -23,7 +23,7 @@ void main() {
   late MonkeyRepositoryImpl sut;
 
   setUp(() {
-    mockAppDatabase = AppDatabase(testingEngine: NativeDatabase.memory());
+    mockAppDatabase = AppDatabase();
     mockInternetChecker = MockInternetChecker();
     mockRemoteDatasource = MockRemoteDatasource();
   });
