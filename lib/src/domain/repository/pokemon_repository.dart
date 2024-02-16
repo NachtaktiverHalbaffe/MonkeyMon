@@ -15,4 +15,6 @@ abstract class PokemonRepository {
   Future<PokemonDto?> updatePokemon(PokemonDto pokemonDto);
 
   Future<bool> deletePokemon({int? id, String? name});
+
+  Future<(bool, int)> computeOffset();
 }

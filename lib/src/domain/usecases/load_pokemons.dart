@@ -6,17 +6,33 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "load_pokemons.g.dart";
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LoadPokemons extends _$LoadPokemons {
-  late final PokemonRepository repository;
-
   @override
-  Stream<PokemonDto> build({CancellationToken? cancellationToken}) {
-    repository = ref.read(pokemonRepositoryImplProvider.notifier);
-    return repository.streamAllPokemon(cancellationToken: cancellationToken);
+  Stream<PokemonDto> build({CancellationToken? cancellationToken}) async* {
+    PokemonRepository repository =
+        ref.read(pokemonRepositoryImplProvider.notifier);
+    ref.onDispose(() {
+      if (cancellationToken != null) {
+        cancellationToken.cancel();
+      }
+    });
+
+    yield* await repository.streamAllPokemon(
+        cancellationToken: cancellationToken);
   }
 
   Future<List<PokemonDto>> loadPokemonOneshot() async {
+    PokemonRepository repository =
+        ref.read(pokemonRepositoryImplProvider.notifier);
     return await repository.getAllPokemon();
+  }
+
+  Future<bool> needsRemoteFetching() async {
+    PokemonRepository repository =
+        ref.read(pokemonRepositoryImplProvider.notifier);
+
+    var (needsFetching, _) = await repository.computeOffset();
+    return needsFetching;
   }
 }

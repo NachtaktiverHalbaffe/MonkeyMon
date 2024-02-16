@@ -86,7 +86,7 @@ LazyDatabase _openConnection() {
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase.createInBackground(
       file,
-      logStatements: kDebugMode,
+      // logStatements: kDebugMode,
     );
   });
 }

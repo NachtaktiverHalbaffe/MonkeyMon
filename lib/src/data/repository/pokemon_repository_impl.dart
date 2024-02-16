@@ -52,7 +52,7 @@ class PokemonRepositoryImpl extends _$PokemonRepositoryImpl
   @override
   Future<List<PokemonDto>> getAllPokemon() async {
     List<Pokemon> pokemons = await database.pokemonsDao.getAllPokemon();
-    var (needRemoteApiFetching, offset) = await _computeOffset();
+    var (needRemoteApiFetching, offset) = await computeOffset();
 
     if (needRemoteApiFetching &&
         await internetConnectionChecker.isConnected()) {
@@ -104,20 +104,18 @@ class PokemonRepositoryImpl extends _$PokemonRepositoryImpl
   @override
   Stream<PokemonDto> streamAllPokemon(
       {CancellationToken? cancellationToken}) async* {
-    int nrCachedItems = await getNrOfCachedPokemon();
-    var (needRemoteApiFetching, offset) = await _computeOffset();
+    var (needRemoteApiFetching, offset) = await computeOffset();
+    List<Pokemon> pokemons = await database.pokemonsDao.getAllPokemon();
 
-    for (int i = 0; i < nrCachedItems; i++) {
+    for (Pokemon pokemon in pokemons) {
       if (cancellationToken != null) {
         if (cancellationToken.isCancelled) {
           return;
         }
       }
-      final Pokemon? pokemon = await database.pokemonsDao.getPokemonByRowNr(i);
 
-      if (pokemon != null) {
-        yield PokemonMapper.mapToDto(pokemon);
-      }
+      await Future.delayed(const Duration(milliseconds: 20));
+      yield PokemonMapper.mapToDto(pokemon);
     }
 
     if (needRemoteApiFetching &&
@@ -150,7 +148,7 @@ class PokemonRepositoryImpl extends _$PokemonRepositoryImpl
   /// Returns:
   ///   bool: If there are more Pokemon available in Remote api than the cached ones
   ///   int: The offset from which the remote datasource must start getting data to get up to date
-  Future<(bool, int)> _computeOffset() async {
+  Future<(bool, int)> computeOffset() async {
     int nrCachedItems = await database.pokemonsDao.getNrOfPokemon();
     int nrAvailableRemoteItems;
     try {
