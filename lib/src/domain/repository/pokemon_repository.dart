@@ -1,3 +1,4 @@
+import 'package:cancellation_token/cancellation_token.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 
 abstract class PokemonRepository {
@@ -5,7 +6,7 @@ abstract class PokemonRepository {
 
   Future<List<PokemonDto>> getAllPokemon();
 
-  Stream<PokemonDto> streamAllPokemon();
+  Stream<PokemonDto> streamAllPokemon({CancellationToken? cancellationToken});
 
   Future<int> getNrOfCachedPokemon();
 
