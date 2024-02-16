@@ -82,5 +82,4 @@ jobs:
             title: "Development Build"
             files: |
               build/app-release.apk
-              build/app-release.aab
               build/Runner.xcarchive
