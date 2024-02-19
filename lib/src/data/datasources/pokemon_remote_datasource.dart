@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cancellation_token/cancellation_token.dart';
 import 'package:monkey_mon/src/data/datasources/app_database.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
@@ -60,8 +62,8 @@ class PokemonRemoteDatasource {
   Future<int> getNrOfTotalPokemon() async {
     try {
       return (await pokedex.pokemon.getPage(limit: 20000)).count;
-    } on Exception {
-      throw NetworkExcpetion("Couldnt get results from Pokeapi",
+    } on Exception catch (e) {
+      throw NetworkExcpetion(e.toString(),
           type: NetworkExceptionType.connectionError);
     }
   }
@@ -186,5 +188,14 @@ class PokemonRemoteDatasource {
             backShiny: remotePokemon.sprites.backShiny,
             backFemale: remotePokemon.sprites.backFemale,
             backShinyFemale: remotePokemon.sprites.backShinyFemale));
+  }
+}
+
+class HttpCertOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

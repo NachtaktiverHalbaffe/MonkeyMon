@@ -148,9 +148,10 @@ class PokemonRepositoryImpl extends _$PokemonRepositoryImpl
   /// Returns:
   ///   bool: If there are more Pokemon available in Remote api than the cached ones
   ///   int: The offset from which the remote datasource must start getting data to get up to date
+  @override
   Future<(bool, int)> computeOffset() async {
     int nrCachedItems = await database.pokemonsDao.getNrOfPokemon();
-    int nrAvailableRemoteItems;
+    int nrAvailableRemoteItems = 0;
     try {
       nrAvailableRemoteItems = await remoteDatasource.getNrOfTotalPokemon();
     } on Exception {

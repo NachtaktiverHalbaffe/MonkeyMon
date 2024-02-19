@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "load_monkeys.g.dart";
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LoadMonkeys extends _$LoadMonkeys {
   late final MonkeyRepository repository;
 

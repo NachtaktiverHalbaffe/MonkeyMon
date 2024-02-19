@@ -18,7 +18,6 @@ class LoadPokemons extends _$LoadPokemons {
       }
     });
 
-    yield* await repository.streamAllPokemon(
-        cancellationToken: cancellationToken);
+    yield* repository.streamAllPokemon(cancellationToken: cancellationToken);
   }
 }

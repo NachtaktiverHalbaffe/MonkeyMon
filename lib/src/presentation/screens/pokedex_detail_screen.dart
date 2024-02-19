@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
+import 'package:monkey_mon/src/domain/usecases/fight_in_arena.dart';
 import 'package:monkey_mon/src/presentation/widgets/pokemon_entry.dart';
 
 class PokedexEntryScreen extends ConsumerWidget {
@@ -24,7 +25,12 @@ class PokedexEntryScreen extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: buttonPadding),
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final arena = ref.read(
+                        arenaFightProvider(const Duration(seconds: 1))
+                            .notifier);
+                    arena.setFighter(pokemonDto: pokemonDto);
+                  },
                   child: const ListTile(
                       leading: Icon(MdiIcons.pokemonGo),
                       title: Text("Als Kämpfer in die Arena schicken"))),
@@ -33,7 +39,12 @@ class PokedexEntryScreen extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: buttonPadding),
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final arena = ref.read(
+                        arenaFightProvider(const Duration(seconds: 1))
+                            .notifier);
+                    arena.setOpponent(pokemonDto: pokemonDto);
+                  },
                   child: const ListTile(
                       leading: Icon(MdiIcons.pokemonGo),
                       title: Text("Als Gegner in die Arena schicken"))),

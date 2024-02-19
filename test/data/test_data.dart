@@ -19,7 +19,7 @@ MonkeyDto generateMonkeyDto() {
     specialAttack: 337,
     specialDefense: 265,
     speed: 346,
-    healthPoints: 356,
+    hp: 356,
   );
 }
 
@@ -38,7 +38,7 @@ MonkeyDto generateMonkeyDtoWithSpeciesData() {
     specialAttack: 337,
     specialDefense: 265,
     speed: 346,
-    healthPoints: 356,
+    hp: 356,
     species: generateSpeciesDto(),
   );
 }
@@ -57,7 +57,7 @@ MonkeysCompanion generateMonkeyCompanion() {
     specialAttack: Value<int?>(monkeyDto.specialAttack),
     specialDefense: Value<int?>(monkeyDto.specialDefense),
     speed: Value<int?>(monkeyDto.speed),
-    healthPoints: Value<int?>(monkeyDto.healthPoints),
+    healthPoints: Value<int?>(monkeyDto.hp),
   );
 }
 
@@ -75,7 +75,7 @@ MonkeysCompanion generateMonkeyCompanionWithSpeciesData() {
       specialAttack: Value<int?>(monkeyDto.specialAttack),
       specialDefense: Value<int?>(monkeyDto.specialDefense),
       speed: Value<int?>(monkeyDto.speed),
-      healthPoints: Value<int?>(monkeyDto.healthPoints),
+      healthPoints: Value<int?>(monkeyDto.hp),
       species: generateSpeciesCompanion().name);
 }
 
@@ -93,7 +93,7 @@ Monkey generateMonkey() {
     specialAttack: monkeyDto.specialAttack,
     specialDefense: monkeyDto.specialDefense,
     speed: monkeyDto.speed,
-    healthPoints: monkeyDto.healthPoints,
+    healthPoints: monkeyDto.hp,
   );
 }
 
@@ -111,7 +111,7 @@ Monkey generateMonkeyWithSpeciesData() {
       specialAttack: monkeyDto.specialAttack,
       specialDefense: monkeyDto.specialDefense,
       speed: monkeyDto.speed,
-      healthPoints: monkeyDto.healthPoints,
+      healthPoints: monkeyDto.hp,
       species: generateSpeciesDto().name);
 }
 

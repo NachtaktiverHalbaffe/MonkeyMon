@@ -58,4 +58,10 @@ void main() {
 
     expect(result.length, greaterThanOrEqualTo(20));
   });
+
+  test('test that the number of available pokemon is gettable', () async {
+    final result = await sut.getNrOfTotalPokemon();
+
+    expect(result, greaterThanOrEqualTo(1000));
+  });
 }

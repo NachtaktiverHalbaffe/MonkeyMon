@@ -13,12 +13,12 @@ class MonkeyMapper {
         description: monkey.description,
         strength: monkey.strength,
         weaknesses: monkey.weaknesses,
-        attack: monkey.attack,
-        defense: monkey.defense,
-        specialAttack: monkey.specialAttack,
-        specialDefense: monkey.specialDefense,
-        speed: monkey.speed,
-        healthPoints: monkey.healthPoints,
+        attack: monkey.attack ?? 0,
+        defense: monkey.defense ?? 0,
+        specialAttack: monkey.specialAttack ?? 0,
+        specialDefense: monkey.specialDefense ?? 0,
+        speed: monkey.speed ?? 0,
+        hp: monkey.healthPoints ?? 0,
         species: species);
   }
 
@@ -36,7 +36,7 @@ class MonkeyMapper {
         specialAttack: Value<int?>(monkeyDto.specialAttack),
         specialDefense: Value<int?>(monkeyDto.specialDefense),
         speed: Value<int?>(monkeyDto.speed),
-        healthPoints: Value<int?>(monkeyDto.healthPoints),
+        healthPoints: Value<int?>(monkeyDto.hp),
         species: Value<String?>(monkeyDto.species!.name),
       );
     } else {
@@ -52,7 +52,7 @@ class MonkeyMapper {
         specialAttack: Value<int?>(monkeyDto.specialAttack),
         specialDefense: Value<int?>(monkeyDto.specialDefense),
         speed: Value<int?>(monkeyDto.speed),
-        healthPoints: Value<int?>(monkeyDto.healthPoints),
+        healthPoints: Value<int?>(monkeyDto.hp),
       );
     }
   }
