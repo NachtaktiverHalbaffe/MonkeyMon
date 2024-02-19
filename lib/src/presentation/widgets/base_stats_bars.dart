@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 
@@ -9,7 +11,7 @@ class BaseStatsBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -133,17 +135,17 @@ class BaseStatsItemWidget extends StatelessWidget {
 
   Color baseStatsBar(double percentage) {
     if (percentage < 0.1666) {
-      return Color(0xFFF34544);
+      return const Color(0xFFF34544);
     } else if (percentage < 0.3332) {
-      return Color(0xFFFF7F0F);
+      return const Color(0xFFFF7F0F);
     } else if (percentage < 0.4998) {
-      return Color(0xFFFFDD57);
+      return const Color(0xFFFFDD57);
     } else if (percentage < 0.6664) {
-      return Color(0xFFA1E515);
+      return const Color(0xFFA1E515);
     } else if (percentage < 0.833) {
-      return Color(0xFF22CD5E);
+      return const Color(0xFF22CD5E);
     } else {
-      return Color(0xFF00C2B7);
+      return const Color(0xFF00C2B7);
     }
   }
 }

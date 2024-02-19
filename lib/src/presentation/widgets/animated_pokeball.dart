@@ -1,7 +1,8 @@
-/// Taken from https://github.com/alanlgoncalves/pokedex/blob/master/lib/shared/ui/widgets/animated_pokeball.dart
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
+/// Taken from https://github.com/alanlgoncalves/pokedex/blob/master/lib/shared/ui/widgets/animated_pokeball.dart
 
 class AnimatedPokeballWidget extends StatefulWidget {
   final Color color;
@@ -24,7 +25,7 @@ class _AnimatedPokeballWidgetState extends State<AnimatedPokeballWidget>
     super.initState();
 
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
+        AnimationController(vsync: this, duration: const Duration(seconds: 2))
           ..repeat();
   }
 

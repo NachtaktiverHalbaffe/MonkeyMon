@@ -5,30 +5,75 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/domain/usecases/load_pokemons.dart';
 import 'package:auto_size_text_plus/auto_size_text.dart';
+import 'package:monkey_mon/src/domain/usecases/load_pokemons_oneshot.dart';
+import 'package:monkey_mon/src/domain/usecases/pokemon_needs_remote_fetching.dart';
 import 'package:monkey_mon/src/presentation/screens/pokedex_detail_screen.dart';
 import 'package:monkey_mon/src/presentation/widgets/animated_pokeball.dart';
+import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/pokemon_entry.dart';
 
 class PokedexScreen extends ConsumerWidget {
   PokedexScreen({super.key});
 
-  final CancellationToken cancellationToken = CancellationToken();
-  final List<PokemonDto> pokemons = List.empty(growable: true);
-  final SwiperController _controller = SwiperController();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final needsRemoteFetching = ref.watch(pokemonNeedsRemoteFetchingProvider);
+
+    return needsRemoteFetching.when(
+      data: (shouldBeStreamed) {
+        if (shouldBeStreamed) {
+          return _PokemonScreenStreaming();
+        } else {
+          return const _PokemonScreenOneshot();
+        }
+      },
+      error: (_, stacktrace) => _scaffoldWithBackground(),
+      loading: () => _loadingWidget(),
+    );
+  }
+}
+
+class _PokemonScreenOneshot extends ConsumerWidget {
+  const _PokemonScreenOneshot({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref
-        .watch(loadPokemonsProvider(cancellationToken: cancellationToken))
-        .whenData((value) => pokemons.add(value));
+    final loadedPokemons = ref.watch(loadPokemonsOneshotProvider);
 
-    return Scaffold(
-      body: _swiperWidget(context),
+    return loadedPokemons.when(
+      data: (data) {
+        return SwiperWidget(pokemons: data);
+      },
+      error: (_, stacktrace) => _scaffoldWithBackground(),
+      loading: () => _loadingWidget(),
     );
   }
+}
 
-  Widget _swiperWidget(BuildContext context) {
-    return Container(
+class _PokemonScreenStreaming extends ConsumerWidget {
+  _PokemonScreenStreaming({super.key});
+
+  final CancellationToken cancellationToken = CancellationToken();
+  final List<PokemonDto> pokemons = List.empty(growable: true);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loadedPokemons = ref.watch(loadPokemonsProvider());
+
+    return loadedPokemons.when(
+      data: (data) {
+        pokemons.add(data);
+        return SwiperWidget(pokemons: pokemons);
+      },
+      error: (_, stacktrace) => _scaffoldWithBackground(),
+      loading: () => _loadingWidget(),
+    );
+  }
+}
+
+Widget _scaffoldWithBackground({Widget? child}) {
+  return Scaffold(
+    body: Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
           alignment: Alignment.topCenter,
@@ -36,12 +81,48 @@ class PokedexScreen extends ConsumerWidget {
           fit: BoxFit.cover,
         ),
       ),
+      child: child ?? Container(),
+    ),
+  );
+}
+
+Widget _loadingWidget() {
+  return _scaffoldWithBackground(child: const LoadingIndicator());
+}
+
+class SwiperWidget extends StatefulWidget {
+  final List<PokemonDto> pokemons;
+  const SwiperWidget({super.key, required this.pokemons});
+
+  @override
+  State<SwiperWidget> createState() => _SwiperWidgetState(pokemons);
+}
+
+class _SwiperWidgetState extends State<SwiperWidget> {
+  final List<PokemonDto> pokemons;
+
+  int currentIndex = 0;
+  final SwiperController controller = SwiperController();
+
+  _SwiperWidgetState(this.pokemons);
+
+  void _setCurrentIndex(int index) {
+    Future.delayed(Duration.zero, () async {
+      setState(() {
+        currentIndex = index;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _scaffoldWithBackground(
       child: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           pokemons.isNotEmpty
               ? Swiper(
-                  controller: _controller,
+                  controller: controller,
                   itemWidth: MediaQuery.of(context).size.width * 0.9,
                   itemHeight: MediaQuery.of(context).size.height * 0.8,
                   itemCount: pokemons.length,
@@ -50,7 +131,7 @@ class PokedexScreen extends ConsumerWidget {
                   autoplay: true,
                   autoplayDisableOnInteraction: true,
                   itemBuilder: (context, index) {
-                    // _controller.index = index;
+                    _setCurrentIndex(index);
                     return _card(context, pokemons[index]);
                   },
                   onTap: (index) {
@@ -60,12 +141,14 @@ class PokedexScreen extends ConsumerWidget {
                             builder: (_) => PokedexEntryScreen(
                                 pokemonDto: pokemons[index])));
                   },
-                  onIndexChanged: (value) => _controller.index = value,
+                  onIndexChanged: (value) {
+                    _setCurrentIndex(value);
+                  },
                 )
-              : Center(),
-          SizedBox(height: 12),
+              : const Center(),
+          const SizedBox(height: 12),
           AutoSizeText(
-            "${_controller.index}/${pokemons.length}",
+            "${currentIndex}/${pokemons.length}",
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white),
           )
@@ -73,27 +156,51 @@ class PokedexScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _card(BuildContext context, PokemonDto pokemonDto) {
-    return Card(
-        color: PokemonEntry.matchPokemonTypeToColor(pokemonDto.types.last),
-        margin: const EdgeInsets.only(bottom: 24.0),
-        elevation: 8.0,
-        child: Stack(
-          children: [
-            Positioned(
-              right: -20,
-              bottom: -30,
-              child: AnimatedPokeballWidget(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .color!
-                      .withOpacity(0.3),
-                  size: MediaQuery.of(context).size.height * 0.25 * 0.7),
-            ),
-            PokemonEntry(pokemonDto: pokemonDto),
-          ],
-        ));
+Widget _card(BuildContext context, PokemonDto pokemonDto) {
+  return Card(
+      color: PokemonEntry.matchPokemonTypeToColor(pokemonDto.types.first)
+          .darken(30),
+      margin: const EdgeInsets.only(bottom: 24.0),
+      elevation: 8.0,
+      child: Stack(
+        children: [
+          Positioned(
+            right: -20,
+            bottom: -30,
+            child: AnimatedPokeballWidget(
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .color!
+                    .withOpacity(0.3),
+                size: MediaQuery.of(context).size.height * 0.25 * 0.7),
+          ),
+          PokemonEntry(pokemonDto: pokemonDto),
+        ],
+      ));
+}
+
+extension ColorExtension on Color {
+  /// Darken a color by [percent] amount (100 = black)
+// ........................................................
+  Color darken([int percent = 10]) {
+    assert(1 <= percent && percent <= 100);
+    var f = 1 - percent / 100;
+    return Color.fromARGB(this.alpha, (this.red * f).round(),
+        (this.green * f).round(), (this.blue * f).round());
+  }
+
+  /// Lighten a color by [percent] amount (100 = white)
+// ........................................................
+  Color lighten([int percent = 10]) {
+    assert(1 <= percent && percent <= 100);
+    var p = percent / 100;
+    return Color.fromARGB(
+        this.alpha,
+        this.red + ((255 - this.red) * p).round(),
+        this.green + ((255 - this.green) * p).round(),
+        this.blue + ((255 - this.blue) * p).round());
   }
 }

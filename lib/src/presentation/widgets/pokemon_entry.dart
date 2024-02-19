@@ -72,13 +72,13 @@ class PokemonEntry extends StatelessWidget {
       case 'normal':
         return const Color(0xFFA7A877);
       case 'fire':
-        return const Color(0xFFFB6C6C);
+        return const Color.fromARGB(255, 250, 62, 29);
       case 'water':
         return const Color(0xFF77BDFE);
       case 'grass':
-        return const Color(0xFF48D0B0);
+        return const Color.fromARGB(255, 8, 216, 60);
       case 'electric':
-        return const Color(0xFFFFCE4B);
+        return const Color.fromARGB(255, 255, 231, 0);
       case 'ice':
         return const Color(0xFF99D7D8);
       case 'fighting':
