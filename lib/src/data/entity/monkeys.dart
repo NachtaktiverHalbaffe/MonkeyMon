@@ -1,3 +1,5 @@
+// ignore_for_file: recursive_getters
+
 import 'package:drift/drift.dart';
 
 import 'species.dart';
