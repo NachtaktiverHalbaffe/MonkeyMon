@@ -11,6 +11,7 @@ import 'package:monkey_mon/src/presentation/screens/pokedex_detail_screen.dart';
 import 'package:monkey_mon/src/presentation/widgets/animated_pokeball.dart';
 import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/pokemon_entry.dart';
+import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 
 class PokedexScreen extends ConsumerWidget {
   PokedexScreen({super.key});
@@ -27,7 +28,8 @@ class PokedexScreen extends ConsumerWidget {
           return const _PokemonScreenOneshot();
         }
       },
-      error: (_, stacktrace) => _scaffoldWithBackground(),
+      error: (_, stacktrace) => const ScaffoldWithBackground(
+          assetPath: "assets/images/pokemon_background.jpg"),
       loading: () => _loadingWidget(),
     );
   }
@@ -44,7 +46,8 @@ class _PokemonScreenOneshot extends ConsumerWidget {
       data: (data) {
         return SwiperWidget(pokemons: data);
       },
-      error: (_, stacktrace) => _scaffoldWithBackground(),
+      error: (_, stacktrace) => const ScaffoldWithBackground(
+          assetPath: "assets/images/pokemon_background.jpg"),
       loading: () => _loadingWidget(),
     );
   }
@@ -65,29 +68,17 @@ class _PokemonScreenStreaming extends ConsumerWidget {
         pokemons.add(data);
         return SwiperWidget(pokemons: pokemons);
       },
-      error: (_, stacktrace) => _scaffoldWithBackground(),
+      error: (_, stacktrace) => const ScaffoldWithBackground(
+          assetPath: "assets/images/pokemon_background.jpg"),
       loading: () => _loadingWidget(),
     );
   }
 }
 
-Widget _scaffoldWithBackground({Widget? child}) {
-  return Scaffold(
-    body: Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          alignment: Alignment.topCenter,
-          image: AssetImage("assets/images/pokemon_background.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: child ?? Container(),
-    ),
-  );
-}
-
 Widget _loadingWidget() {
-  return _scaffoldWithBackground(child: const LoadingIndicator());
+  return const ScaffoldWithBackground(
+      assetPath: "assets/images/pokemon_background.jpg",
+      child: LoadingIndicator());
 }
 
 class SwiperWidget extends StatefulWidget {
@@ -108,15 +99,18 @@ class _SwiperWidgetState extends State<SwiperWidget> {
 
   void _setCurrentIndex(int index) {
     Future.delayed(Duration.zero, () async {
-      setState(() {
-        currentIndex = index;
-      });
+      if (this.mounted) {
+        setState(() {
+          currentIndex = index;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _scaffoldWithBackground(
+    return ScaffoldWithBackground(
+      assetPath: "assets/images/pokemon_background.jpg",
       child: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
