@@ -23,13 +23,10 @@ class MyApp extends StatelessWidget {
       data: (Brightness brightness) {
         switch (brightness) {
           case Brightness.dark:
-            print(brightness);
             return darkTheme;
           case Brightness.light:
-            print(brightness);
             return lightTheme;
           default:
-            print(brightness);
             return darkTheme;
         }
       },

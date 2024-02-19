@@ -27,7 +27,7 @@ final databaseProvider = Provider<AppDatabase>(
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(impl.connect());
 
-  AppDatabase.forTesting(DatabaseConnection connection) : super(connection);
+  AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
   int get schemaVersion => 1;

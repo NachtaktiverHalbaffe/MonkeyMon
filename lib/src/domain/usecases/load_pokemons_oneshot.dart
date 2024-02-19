@@ -4,21 +4,15 @@ import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/domain/repository/pokemon_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part "load_pokemons.g.dart";
+part "load_pokemons_oneshot.g.dart";
 
 @Riverpod(keepAlive: true)
-class LoadPokemons extends _$LoadPokemons {
+class LoadPokemonsOneshot extends _$LoadPokemonsOneshot {
   @override
-  Stream<PokemonDto> build({CancellationToken? cancellationToken}) async* {
+  Future<List<PokemonDto>> build() async {
     PokemonRepository repository =
         ref.read(pokemonRepositoryImplProvider.notifier);
-    ref.onDispose(() {
-      if (cancellationToken != null) {
-        cancellationToken.cancel();
-      }
-    });
 
-    yield* await repository.streamAllPokemon(
-        cancellationToken: cancellationToken);
+    return await repository.getAllPokemon();
   }
 }

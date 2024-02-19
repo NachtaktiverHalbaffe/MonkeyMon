@@ -2,7 +2,7 @@ import 'package:cancellation_token/cancellation_token.dart';
 import 'package:monkey_mon/src/data/datasources/app_database.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/exceptions/network_exception.dart';
-import 'package:pokedex/pokedex.dart' as pokedexAPI;
+import 'package:pokedex/pokedex.dart' as pokedex_api;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 final pokemonRemoteDatasourceProvider = Provider<PokemonRemoteDatasource>(
@@ -10,7 +10,7 @@ final pokemonRemoteDatasourceProvider = Provider<PokemonRemoteDatasource>(
 );
 
 class PokemonRemoteDatasource {
-  final pokedexAPI.Pokedex pokedex = pokedexAPI.Pokedex();
+  final pokedex_api.Pokedex pokedex = pokedex_api.Pokedex();
 
   Future<Pokemon?> getPokemon({int? id, String? name}) async {
     Pokemon pokemon;
@@ -33,7 +33,7 @@ class PokemonRemoteDatasource {
 
   Future<List<Pokemon>> getAllPokemon({int? limit, int? offset}) async {
     List<Pokemon> pokemons = List.empty(growable: true);
-    final List<pokedexAPI.NamedAPIResource> remotePokemons;
+    final List<pokedex_api.NamedAPIResource> remotePokemons;
     try {
       remotePokemons = (await pokedex.pokemon
               .getPage(limit: limit ?? 20000, offset: offset ?? 0))
@@ -71,7 +71,7 @@ class PokemonRemoteDatasource {
     int? offset,
     CancellationToken? cancellationToken,
   }) async* {
-    final List<pokedexAPI.NamedAPIResource> remotePokemons;
+    final List<pokedex_api.NamedAPIResource> remotePokemons;
     try {
       remotePokemons = (await pokedex.pokemon
               .getPage(limit: limit ?? 20000, offset: offset ?? 0))
@@ -98,7 +98,7 @@ class PokemonRemoteDatasource {
     }
   }
 
-  Future<Pokemon> _parsePokemon(pokedexAPI.Pokemon remotePokemon) async {
+  Future<Pokemon> _parsePokemon(pokedex_api.Pokemon remotePokemon) async {
     int attack = 0;
     int defense = 0;
     int specialAttack = 0;
@@ -137,9 +137,9 @@ class PokemonRemoteDatasource {
       types.add(remotePokemon.types[i].type.name);
     }
 
-    final Future<pokedexAPI.PokemonSpecies> pokemonSpecies;
+    final Future<pokedex_api.PokemonSpecies> pokemonSpecies;
     try {
-      pokemonSpecies = pokedexAPI.Pokedex()
+      pokemonSpecies = pokedex_api.Pokedex()
           .pokemonSpecies
           .getByUrl(remotePokemon.species.url);
     } on Exception {
@@ -147,7 +147,7 @@ class PokemonRemoteDatasource {
           type: NetworkExceptionType.connectionError);
     }
 
-    final List<pokedexAPI.FlavorText> pokemonDescriptions =
+    final List<pokedex_api.FlavorText> pokemonDescriptions =
         await pokemonSpecies.then((value) => value.flavorTextEntries);
     for (int i = 0; i < pokemonDescriptions.length; i++) {
       if (pokemonDescriptions[i].language.name == "de") {
@@ -157,7 +157,7 @@ class PokemonRemoteDatasource {
       }
     }
 
-    final List<pokedexAPI.Name> pokemonNames =
+    final List<pokedex_api.Name> pokemonNames =
         await pokemonSpecies.then((value) => value.names);
     for (int i = 0; i < pokemonNames.length; i++) {
       if (pokemonNames[i].language.name == "de") {

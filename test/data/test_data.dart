@@ -356,7 +356,7 @@ PokemonDto generatePokemonDto() {
     specialAttack: 104,
     specialDefense: 71,
     speed: 108,
-    types: ["fire", "fighting"] as List<String>,
+    types: ["fire", "fighting"],
     sprites: PokemonSprites(
       frontDefault:
           "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/392.png",
