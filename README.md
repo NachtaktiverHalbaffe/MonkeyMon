@@ -3,6 +3,8 @@ A example flutter project to dive depper into the recent changes in Flutter and 
 
 The project builds around the [Pokeapi](https://pokeapi.co/) and my own [Spring Boot REST API](https://github.com/NachtaktiverHalbaffe/MonkeyAPI-SpringBoot).
 
+The current web version of the flutter app can be accessed via [Github Pages](https://nachtaktiverhalbaffe.github.io/MonkeyMon/) of this repo.
+
 # Project Idea
 It's a project to dive into Flutter and experiment with it, so the Application itself is useless and is tailored to cover as most topics as possible. As this is my second full-blown Flutter app, the frameworks etc. are explicitly chosen differemtly from my [first project](https://github.com/NachtaktiverHalbaffe/eje).
 
