@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monkey_mon/src/core/utils/logger.dart';
 import 'package:monkey_mon/src/domain/model/mon.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
@@ -13,13 +14,13 @@ class ArenaFight extends _$ArenaFight {
   Mon? fighter;
   Mon? opponent;
 
+  final log = getLogger();
+
   /// First returning value is fighter and second returning value is opponent
   @override
   Stream<(Mon, Mon)> build(Duration? speed) async* {
     while (fighter == null || opponent == null) {
-      print("Not all fighters are present");
-      print("Fighter: $fighter");
-      print("Opponent: $opponent");
+      log.d("Not all fighters are present");
       await Future.delayed(const Duration(seconds: 1));
     }
 
@@ -33,9 +34,9 @@ class ArenaFight extends _$ArenaFight {
       }
       fightOneRound(speed);
 
-      print("Current fight status");
-      print("Fighter: ${fighter!.currentHp} hp");
-      print("Opponent: ${opponent!.currentHp} hp");
+      log.d("Current fight status");
+      log.d("Fighter: ${fighter!.currentHp} hp");
+      log.d("Opponent: ${opponent!.currentHp} hp");
       yield (fighter!, opponent!);
       await Future.delayed(speed ?? const Duration(seconds: 1));
     }
@@ -45,7 +46,7 @@ class ArenaFight extends _$ArenaFight {
     if (_fighterIsFaster()) {
       _fighterAttack();
       if (opponent!.isDefeated) {
-        print("fighter won");
+        log.d("fighter won");
         return;
       }
       await Future.delayed(speed ?? Duration.zero);
@@ -53,7 +54,7 @@ class ArenaFight extends _$ArenaFight {
     } else {
       _opponentAttack();
       if (fighter!.isDefeated) {
-        print("opponent won");
+        log.d("opponent won");
         return;
       }
       await Future.delayed(speed ?? Duration.zero);
@@ -82,7 +83,7 @@ class ArenaFight extends _$ArenaFight {
       fighter = Mon<MonkeyDto>(currentHp: monkeyDto!.hp, mon: monkeyDto);
     }
 
-    print("Set fighter $fighter");
+    log.d("Set fighter $fighter");
   }
 
   void setOpponent({PokemonDto? pokemonDto, MonkeyDto? monkeyDto}) {
@@ -106,7 +107,7 @@ class ArenaFight extends _$ArenaFight {
       opponent = Mon<MonkeyDto>(currentHp: monkeyDto!.hp, mon: monkeyDto);
     }
 
-    print("Set opponent $opponent");
+    log.d("Set opponent $opponent");
   }
 
   void reset() {
@@ -175,7 +176,7 @@ class ArenaFight extends _$ArenaFight {
 
     opponent = opponent!.copyWith(currentHp: opponent!.currentHp - hpToLose);
 
-    print("Fighter attacked and damaged $hpToLose hp");
+    log.d("Fighter attacked and damaged $hpToLose hp");
   }
 
   void _opponentAttack() {
@@ -207,6 +208,6 @@ class ArenaFight extends _$ArenaFight {
 
     fighter = fighter!.copyWith(currentHp: fighter!.currentHp - hpToLose);
 
-    print("Opponent attacked and damaged $hpToLose hp");
+    log.d("Opponent attacked and damaged $hpToLose hp");
   }
 }
