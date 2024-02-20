@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_pixels/image_pixels.dart';
 import 'package:monkey_mon/src/domain/model/mon.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
@@ -9,7 +10,7 @@ import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 
 class ArenaScreen extends ConsumerWidget {
-  const ArenaScreen({super.key});
+  ArenaScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,12 +39,12 @@ class ArenaScreen extends ConsumerWidget {
           Positioned(
             left: MediaQuery.of(context).size.width * 0.02,
             bottom: MediaQuery.of(context).size.height * 0.13,
-            child: _fighter(context),
+            child: _sprite(context),
           ),
           Positioned(
             right: -(MediaQuery.of(context).size.width * 0.05),
             top: MediaQuery.of(context).size.height * 0.15,
-            child: _opponent(context),
+            child: _sprite(context),
           ),
         ],
       ),
@@ -75,86 +76,108 @@ class ArenaScreen extends ConsumerWidget {
       fit: BoxFit.fitHeight,
       child: Stack(children: [
         Positioned(
-          bottom: MediaQuery.of(context).size.height * 0.25,
+          left: 0,
+          bottom: MediaQuery.of(context).size.height * 0.13,
+          child: _sprite(context, imageUrl: imageUrlFighter),
+        ),
+        Positioned(
+          right: 0,
+          top: MediaQuery.of(context).size.height * 0.02,
+          child: _sprite(context, imageUrl: imageUrlOpponent),
+        ),
+        Positioned(
+          bottom: MediaQuery.of(context).size.height * 0.42,
           right: MediaQuery.of(context).size.width * 0.05,
           child: _textBox(context, fighter),
         ),
         Positioned(
-          top: MediaQuery.of(context).size.height * 0.15,
+          top: MediaQuery.of(context).size.height * 0.35,
           left: MediaQuery.of(context).size.width * 0.05,
           child: _textBox(context, opponent),
-        ),
-        Positioned(
-          left: MediaQuery.of(context).size.width * 0.02,
-          bottom: MediaQuery.of(context).size.height * 0.13,
-          child: _fighter(context, imageUrl: imageUrlFighter),
-        ),
-        Positioned(
-          right: -(MediaQuery.of(context).size.width * 0.05),
-          top: MediaQuery.of(context).size.height * 0.15,
-          child: _opponent(context, imageUrl: imageUrlOpponent),
         ),
       ]),
     );
   }
 
-  Widget _fighter(BuildContext context, {String? imageUrl}) {
+  Widget _sprite(BuildContext context, {String? imageUrl}) {
+    final Image battleTile = Image.asset(
+      "assets/images/battle_tile.png",
+      height: MediaQuery.of(context).size.height * 0.08,
+      width: MediaQuery.of(context).size.height * 0.35,
+      fit: BoxFit.fitHeight,
+    );
+
+    final CachedNetworkImage sprite = CachedNetworkImage(
+      imageUrl: imageUrl ??
+          "https://github.com/PokeAPI/sprites/blob/ca5a7886c10753144e6fae3b69d45a4d42a449b4/sprites/pokemon/0.png",
+      fit: BoxFit.fitHeight,
+      height: MediaQuery.of(context).size.height * 0.3,
+      width: MediaQuery.of(context).size.height * 0.3,
+      imageBuilder: (context, imageProvider) {
+        return ImagePixels(
+            imageProvider: imageProvider,
+            builder: (context, img) {
+              int offsetSpriteVertical = 17;
+              if (img.hasImage) {
+                for (int y = 0; y < img.height!; y++) {
+                  for (int x = 0; x < img.width!; x++) {
+                    final pixelColor = img.pixelColorAt!(x, y);
+                    if (pixelColor.blue != 0 ||
+                        pixelColor.red != 0 ||
+                        pixelColor.green != 0) {
+                      offsetSpriteVertical = y;
+
+                      final translationX =
+                          (offsetSpriteVertical.toDouble() * 2.0) -
+                              battleTile.height! * 0.1;
+
+                      return Container(
+                        transform:
+                            Matrix4.translationValues(0, translationX, 0),
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                }
+              }
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              );
+            });
+      },
+    );
+    final double offsetSpriteHorizontal =
+        (sprite.width! - battleTile.width!).abs() / 2;
+
     return SizedBox(
-      width: 400,
-      height: 400,
+      width: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Stack(
-        alignment: Alignment.bottomLeft,
         children: [
           Positioned(
             left: 0,
             bottom: 0,
-            child: Image.asset(
-              "assets/images/battle_tile.png",
-              scale: 0.5,
-            ),
+            child: battleTile,
           ),
           imageUrl != null
               ? Positioned(
-                  bottom: -(MediaQuery.of(context).size.height * 0.05),
-                  left: MediaQuery.of(context).size.width * 0.06,
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    fit: BoxFit.contain,
-                    height: 300,
-                    width: 200,
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-    );
-  }
-
-  Widget _opponent(BuildContext context, {String? imageUrl}) {
-    return SizedBox(
-      width: 400,
-      height: 400,
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.16,
-            right: MediaQuery.of(context).size.width * 0.05,
-            child: Image.asset(
-              "assets/images/battle_tile.png",
-              scale: 0.5,
-            ),
-          ),
-          imageUrl != null
-              ? Positioned(
-                  top: -(MediaQuery.of(context).size.width * 0.06),
-                  right: MediaQuery.of(context).size.width * 0.1,
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    fit: BoxFit.contain,
-                    height: 300,
-                    width: 200,
-                  ),
+                  bottom: 0,
+                  left: offsetSpriteHorizontal,
+                  child: sprite,
                 )
               : Container(),
         ],
@@ -180,10 +203,10 @@ class ArenaScreen extends ConsumerWidget {
 
     return Card(
       elevation: 12,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.primary,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.1,
-        width: MediaQuery.of(context).size.width * 0.4,
+        width: MediaQuery.of(context).size.width * 0.45,
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -195,7 +218,10 @@ class ArenaScreen extends ConsumerWidget {
                     top: MediaQuery.of(context).size.height * 0.01),
                 child: Text(
                   name,
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: Colors.white),
                 ),
               ),
             ],
@@ -231,7 +257,10 @@ class ArenaScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("${mon.currentHp}/$maxHp"),
+              Text(
+                "${mon.currentHp}/$maxHp",
+                style: const TextStyle(color: Colors.white),
+              ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.02),
             ],
           )
