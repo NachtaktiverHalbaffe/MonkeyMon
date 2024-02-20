@@ -15,6 +15,7 @@ class BottonNavBar extends StatelessWidget {
     const BottomBarItem(
       inActiveItem: Icon(
         MdiIcons.pokeball,
+        color: Colors.white,
       ),
       activeItem: Icon(
         MdiIcons.pokeball,
@@ -25,6 +26,7 @@ class BottonNavBar extends StatelessWidget {
     const BottomBarItem(
       inActiveItem: Icon(
         MdiIcons.cardBulleted,
+        color: Colors.white,
       ),
       activeItem: Icon(
         MdiIcons.cardBulleted,
@@ -35,6 +37,7 @@ class BottonNavBar extends StatelessWidget {
     const BottomBarItem(
       inActiveItem: Icon(
         MdiIcons.pokemonGo,
+        color: Colors.white,
       ),
       activeItem: Icon(
         MdiIcons.pokemonGo,
@@ -45,6 +48,7 @@ class BottonNavBar extends StatelessWidget {
     const BottomBarItem(
       inActiveItem: Icon(
         MdiIcons.cog,
+        color: Colors.white,
       ),
       activeItem: Icon(
         MdiIcons.cog,
@@ -66,8 +70,10 @@ class BottonNavBar extends StatelessWidget {
       shadowElevation:
           ThemeManager.of(context).brightness == Brightness.light ? 8 : 0,
       kBottomRadius: 28.0,
-      itemLabelStyle:
-          Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 8),
+      itemLabelStyle: Theme.of(context)
+          .textTheme
+          .labelSmall!
+          .copyWith(fontSize: 8, color: Colors.white),
     );
   }
 }

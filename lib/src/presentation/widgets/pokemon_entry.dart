@@ -11,6 +11,8 @@ class PokemonEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double imageHeight = MediaQuery.of(context).size.height * 0.25;
+    final String placeholderImage =
+        "https://github.com/PokeAPI/sprites/blob/ca5a7886c10753144e6fae3b69d45a4d42a449b4/sprites/pokemon/0.png";
 
     List<Widget> nameWidgetRow = List.empty(growable: true);
     nameWidgetRow.add(
@@ -38,8 +40,8 @@ class PokemonEntry extends StatelessWidget {
             child: CachedNetworkImage(
               height: imageHeight,
               imageUrl: pokemonDto.sprites != null
-                  ? pokemonDto.sprites!.frontDefault!
-                  : "",
+                  ? pokemonDto.sprites!.frontDefault ?? placeholderImage
+                  : placeholderImage,
               fit: BoxFit.cover,
             ),
           ),
