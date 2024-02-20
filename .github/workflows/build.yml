@@ -19,6 +19,12 @@ jobs:
         with:
             channel: "stable"
       - run: flutter clean
+      - name: Cache pub dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       -  run:  flutter build apk --release
@@ -33,11 +39,17 @@ jobs:
     name: Build web app and deploy to github pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
             channel: "stable"
       - run: flutter clean
+      - name: Cache pub dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run:  flutter build web --base-href=/MonkeyMon/ 
@@ -72,6 +84,12 @@ jobs:
 
       # Install your project's dependencies
       - run: flutter clean
+      - name: Cache pub dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
       - run: flutter pub get
 
       # Build and sign the ipa using a single flutter command
