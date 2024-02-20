@@ -12,6 +12,7 @@ import 'package:monkey_mon/src/presentation/widgets/animated_pokeball.dart';
 import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/pokemon_entry.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
+import 'package:monkey_mon/src/presentation/widgets/swiper_widget.dart';
 
 class PokedexScreen extends ConsumerWidget {
   const PokedexScreen({super.key});
@@ -44,7 +45,17 @@ class _PokemonScreenOneshot extends ConsumerWidget {
 
     return loadedPokemons.when(
       data: (data) {
-        return SwiperWidget(pokemons: data);
+        return SwiperWidget<PokemonDto>(
+          items: data,
+          cardBuilder: (context, item) => _card(context, item),
+          onTap: (index) {
+            Navigator.push<PokedexEntryScreen>(
+                context,
+                MaterialPageRoute(
+                    builder: (_) =>
+                        PokedexEntryScreen(pokemonDto: data[index])));
+          },
+        );
       },
       error: (_, stacktrace) => const ScaffoldWithBackground(
           assetPath: "assets/images/pokemon_background.jpg"),
@@ -66,7 +77,17 @@ class _PokemonScreenStreaming extends ConsumerWidget {
     return loadedPokemons.when(
       data: (data) {
         pokemons.add(data);
-        return SwiperWidget(pokemons: pokemons);
+        return SwiperWidget<PokemonDto>(
+          items: pokemons,
+          cardBuilder: (context, item) => _card(context, item),
+          onTap: (index) {
+            Navigator.push<PokedexEntryScreen>(
+                context,
+                MaterialPageRoute(
+                    builder: (_) =>
+                        PokedexEntryScreen(pokemonDto: pokemons[index])));
+          },
+        );
       },
       error: (_, stacktrace) => const ScaffoldWithBackground(
           assetPath: "assets/images/pokemon_background.jpg"),
@@ -79,91 +100,6 @@ Widget _loadingWidget() {
   return const ScaffoldWithBackground(
       assetPath: "assets/images/pokemon_background.jpg",
       child: LoadingIndicator());
-}
-
-class SwiperWidget extends StatefulWidget {
-  final List<PokemonDto> pokemons;
-  const SwiperWidget({super.key, required this.pokemons});
-
-  @override
-  State<SwiperWidget> createState() => _SwiperWidgetState(pokemons);
-}
-
-class _SwiperWidgetState extends State<SwiperWidget> {
-  final List<PokemonDto> pokemons;
-
-  int currentIndex = 0;
-  final SwiperController controller = SwiperController();
-
-  _SwiperWidgetState(this.pokemons);
-
-  void _setCurrentIndex(int index) {
-    Future.delayed(Duration.zero, () async {
-      if (this.mounted) {
-        setState(() {
-          currentIndex = index;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaffoldWithBackground(
-      assetPath: "assets/images/pokemon_background.jpg",
-      child: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          pokemons.isNotEmpty
-              ? Swiper(
-                  controller: controller,
-                  itemWidth: MediaQuery.of(context).size.width * 0.9,
-                  itemHeight: MediaQuery.of(context).size.height * 0.8,
-                  itemCount: pokemons.length,
-                  layout: SwiperLayout.TINDER,
-                  loop: true,
-                  autoplay: true,
-                  autoplayDisableOnInteraction: true,
-                  itemBuilder: (context, index) {
-                    _setCurrentIndex(index);
-                    return _card(context, pokemons[index]);
-                  },
-                  onTap: (index) {
-                    Navigator.push<PokedexEntryScreen>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => PokedexEntryScreen(
-                                pokemonDto: pokemons[index])));
-                  },
-                  onIndexChanged: (value) {
-                    _setCurrentIndex(value);
-                  },
-                )
-              : const Center(),
-          const SizedBox(height: 12),
-          AutoSizeText(
-            "$currentIndex/${pokemons.length}",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 6.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 6.0,
-                  color: Color.fromARGB(125, 0, 0, 255),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
 }
 
 Widget _card(BuildContext context, PokemonDto pokemonDto) {
