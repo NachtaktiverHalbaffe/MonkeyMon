@@ -10,7 +10,7 @@ jobs:
     name: Build signed Android binaries
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -20,7 +20,7 @@ jobs:
             channel: "stable"
       - run: flutter clean
       - name: Cache pub dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
@@ -30,7 +30,7 @@ jobs:
       -  run:  flutter build apk --release
       
       - name: Upload app bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -39,13 +39,13 @@ jobs:
     name: Build web app and deploy to github pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
             channel: "stable"
       - run: flutter clean
       - name: Cache pub dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
@@ -54,12 +54,12 @@ jobs:
       - run: flutter pub upgrade
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run:  flutter build web --base-href=/MonkeyMon/ 
-      - uses: vimtor/action-zip@v1.1
+      - uses: vimtor/action-zip@v1.2
         with:
           files: build/web/
           dest: monkey_mon_web.zip     
       - name: Upload web bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: web
           path: monkey_mon_web.zip     
@@ -74,7 +74,7 @@ jobs:
     steps:
       # Checks-out our repository under $GITHUB_WORKSPACE, so our job can access it
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Select Xcode version
         run: sudo xcode-select -s '/Applications/Xcode_15.0.1.app/Contents/Developer'   
       # Install flutter
@@ -86,7 +86,7 @@ jobs:
       # Install your project's dependencies
       - run: flutter clean
       - name: Cache pub dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
@@ -100,7 +100,7 @@ jobs:
           
       # Collect the file and upload as artifact         
       - name: collect ipa artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
          name: ipa
          # Path to the release files
@@ -132,5 +132,5 @@ jobs:
             title: "Development Build"
             files: |
               build/app-release.apk
-              build/monkey_mon_web.zip   
+              build/monkey_mon_web.zip
               build/Runner.xcarchive
