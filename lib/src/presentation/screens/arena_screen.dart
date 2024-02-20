@@ -1,3 +1,4 @@
+import 'package:auto_size_text_plus/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,7 @@ import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 
 class ArenaScreen extends ConsumerWidget {
-  ArenaScreen({super.key});
+  const ArenaScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,35 +20,61 @@ class ArenaScreen extends ConsumerWidget {
           return _battleField(context, fighter: data.$1, opponent: data.$2);
         },
         error: (_, stacktrace) => _battleFieldEmpty(context),
-        loading: () => _loadingScreen());
+        loading: () => _loadingScreen(context));
   }
 
-  Widget _loadingScreen() {
-    return const ScaffoldWithBackground(
+  Widget _loadingScreen(BuildContext context) {
+    return ScaffoldWithBackground(
       assetPath: "assets/images/arena_background.jpg",
-      fit: BoxFit.fitHeight,
-      child: LoadingIndicator(),
+      fit: BoxFit.cover,
+      child: Stack(children: [
+        Positioned(
+          left: 0,
+          bottom: MediaQuery.of(context).size.height * 0.13,
+          child: _sprite(context),
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * 0.15,
+          top: MediaQuery.of(context).size.height * 0.5,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: AutoSizeText(
+              "Bitte wähle einen Kämpfer und einen Gegner im Pokedex oder Mondex aus",
+              maxLines: 3,
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Colors.black),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: MediaQuery.of(context).size.height * 0.02,
+          child: _sprite(context),
+        ),
+      ]),
     );
   }
 
   Widget _battleFieldEmpty(BuildContext context) {
     return ScaffoldWithBackground(
       assetPath: "assets/images/arena_background.jpg",
-      fit: BoxFit.fitHeight,
-      child: Stack(
-        children: [
-          Positioned(
-            left: MediaQuery.of(context).size.width * 0.02,
-            bottom: MediaQuery.of(context).size.height * 0.13,
-            child: _sprite(context),
-          ),
-          Positioned(
-            right: -(MediaQuery.of(context).size.width * 0.05),
-            top: MediaQuery.of(context).size.height * 0.15,
-            child: _sprite(context),
-          ),
-        ],
-      ),
+      fit: BoxFit.cover,
+      child: Stack(children: [
+        Positioned(
+          left: 0,
+          bottom: MediaQuery.of(context).size.height * 0.13,
+          child: _sprite(context),
+        ),
+        Positioned(
+          right: 0,
+          top: MediaQuery.of(context).size.height * 0.02,
+          child: _sprite(context),
+        ),
+      ]),
     );
   }
 
@@ -73,7 +100,7 @@ class ArenaScreen extends ConsumerWidget {
 
     return ScaffoldWithBackground(
       assetPath: "assets/images/arena_background.jpg",
-      fit: BoxFit.fitHeight,
+      fit: BoxFit.cover,
       child: Stack(children: [
         Positioned(
           left: 0,

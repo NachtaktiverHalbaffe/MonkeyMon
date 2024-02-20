@@ -14,7 +14,7 @@ import 'package:monkey_mon/src/presentation/widgets/pokemon_entry.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 
 class PokedexScreen extends ConsumerWidget {
-  PokedexScreen({super.key});
+  const PokedexScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -142,9 +142,23 @@ class _SwiperWidgetState extends State<SwiperWidget> {
               : const Center(),
           const SizedBox(height: 12),
           AutoSizeText(
-            "${currentIndex}/${pokemons.length}",
+            "$currentIndex/${pokemons.length}",
             style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white),
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: <Shadow>[
+                Shadow(
+                  offset: Offset(2.0, 2.0),
+                  blurRadius: 3.0,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+                Shadow(
+                  offset: Offset(2.0, 2.0),
+                  blurRadius: 3.0,
+                  color: Color.fromARGB(125, 0, 0, 255),
+                ),
+              ],
+            ),
           )
         ],
       ),

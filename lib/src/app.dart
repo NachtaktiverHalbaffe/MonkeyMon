@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    PokedexScreen(),
+    const PokedexScreen(),
     const MonkeydexScreen(),
-    ArenaScreen(),
+    const ArenaScreen(),
     const SettingsScreen()
   ];
 
