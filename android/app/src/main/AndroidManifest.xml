@@ -3,9 +3,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="monkey_mon"
+        android:label="@string/appName"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:enableOnBackInvokedCallback="true"
         >
     
