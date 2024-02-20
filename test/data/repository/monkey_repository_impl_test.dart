@@ -40,7 +40,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
       final MonkeyDto expectedResult = generateMonkeyDto();
 
@@ -52,7 +52,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testDataMonkey = generateMonkeyDto();
       final SpeciesDto testDataSpecies = generateSpeciesDto();
       final MonkeyDto expectedResult = generateMonkeyDtoWithSpeciesData();
@@ -68,7 +68,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
       final MonkeyDto expectedResult = generateMonkeyDto();
 
@@ -84,7 +84,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testDataMonkey = generateMonkeyDto();
       final SpeciesDto testDataSpecies = generateSpeciesDto();
       final MonkeyDto expectedResult = generateMonkeyDtoWithSpeciesData();
@@ -104,7 +104,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       await sut.createMonkey(monkeyDto: testData);
@@ -119,7 +119,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       final result = await sut.deleteMonkey(testData.id);
@@ -135,7 +135,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       await sut.createMonkey(monkeyDto: testData);
@@ -152,7 +152,7 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       final MonkeyDto? result = await sut.getMonkey(testData.id);
@@ -175,9 +175,9 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker),
         monkeyRemoteDatasourceProvider
-            .overrideWith((ref) => mockRemoteDatasource)
+            .overrideWith((ref, baseUrl) => mockRemoteDatasource)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       final MonkeyDto? result = await sut.getMonkey(testData.id);
@@ -197,9 +197,9 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker),
         monkeyRemoteDatasourceProvider
-            .overrideWith((ref) => mockRemoteDatasource)
+            .overrideWith((ref, baseUrl) => mockRemoteDatasource)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
 
       final MonkeyDto? result = await sut.getMonkey(testData.id);
@@ -219,7 +219,7 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
 
       final List<MonkeyDto> result = await sut.getAllMonkeys();
 
@@ -232,7 +232,7 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto();
       await sut.createMonkey(monkeyDto: testData);
       await sut.createMonkey(monkeyDto: testData.copyWith(id: 3));
@@ -265,9 +265,9 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker),
         monkeyRemoteDatasourceProvider
-            .overrideWith((ref) => mockRemoteDatasource)
+            .overrideWith((ref, baseUrl) => mockRemoteDatasource)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
 
       final List<MonkeyDto> result = await sut.getAllMonkeys();
 
@@ -288,9 +288,9 @@ void main() {
         internetConnectionCheckerProvider
             .overrideWith(() => mockInternetChecker),
         monkeyRemoteDatasourceProvider
-            .overrideWith((ref) => mockRemoteDatasource)
+            .overrideWith((ref, baseUrl) => mockRemoteDatasource)
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
 
       final List<MonkeyDto> result = await sut.getAllMonkeys();
 
@@ -305,7 +305,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData = generateMonkeyDto().copyWith(name: "Felix");
 
       await sut.createMonkey(monkeyDto: generateMonkeyDto());
@@ -320,7 +320,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData =
           generateMonkeyDto().copyWith(name: "Felix", id: 5);
 
@@ -335,7 +335,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testDataMonkey =
           generateMonkeyDto().copyWith(name: "Felix");
       final SpeciesDto testDataSpecies = generateSpeciesDto();
@@ -355,7 +355,7 @@ void main() {
       final testContainer = createContainer(overrides: [
         databaseProvider.overrideWith((ref) => mockAppDatabase),
       ]);
-      sut = testContainer.read(monkeyRepositoryImplProvider.notifier);
+      sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData =
           generateMonkeyDto().copyWith(name: "Felix", id: 5);
       final SpeciesDto testDataSpecies = generateSpeciesDto();

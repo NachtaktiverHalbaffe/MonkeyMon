@@ -21,6 +21,10 @@ abstract class DioRemoteDatasource {
     initializeInterceptors();
   }
 
+  void setBaseUrl(String baseUrl) {
+    dio.options.baseUrl = baseUrl;
+  }
+
   void initializeInterceptors() {
     dio.interceptors.add(
       TalkerDioLogger(

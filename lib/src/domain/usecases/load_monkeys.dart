@@ -10,8 +10,9 @@ class LoadMonkeys extends _$LoadMonkeys {
   late final MonkeyRepository repository;
 
   @override
-  Future<List<MonkeyDto>> build() async {
-    repository = ref.read(monkeyRepositoryImplProvider.notifier);
+  Future<List<MonkeyDto>> build({String? baseUrl}) async {
+    repository =
+        ref.read(monkeyRepositoryImplProvider(baseUrl: baseUrl).notifier);
     return await repository.getAllMonkeys();
   }
 }

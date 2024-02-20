@@ -10,8 +10,9 @@ class CreateMonkey extends _$CreateMonkey {
   late MonkeyRepository repository;
 
   @override
-  Future<MonkeyDto?> build(MonkeyDto monkey) async {
-    repository = ref.read(monkeyRepositoryImplProvider.notifier);
+  Future<MonkeyDto?> build(MonkeyDto monkey, {String? baseUrl}) async {
+    repository =
+        ref.read(monkeyRepositoryImplProvider(baseUrl: baseUrl).notifier);
     return await repository.createMonkey(monkeyDto: monkey);
   }
 }

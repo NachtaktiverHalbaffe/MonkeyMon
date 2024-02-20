@@ -136,7 +136,7 @@ class ArenaScreen extends ConsumerWidget {
 
     final CachedNetworkImage sprite = CachedNetworkImage(
       imageUrl: imageUrl ??
-          "https://github.com/PokeAPI/sprites/blob/ca5a7886c10753144e6fae3b69d45a4d42a449b4/sprites/pokemon/0.png",
+          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png",
       fit: BoxFit.fitHeight,
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.height * 0.3,

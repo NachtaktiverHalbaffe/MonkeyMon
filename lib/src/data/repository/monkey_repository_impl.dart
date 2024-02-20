@@ -14,14 +14,17 @@ part "monkey_repository_impl.g.dart";
 @riverpod
 class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
     implements MonkeyRepository {
-  late final AppDatabase database = ref.read(databaseProvider);
-  late final InternetConnectionChecker internetConnectionChecker =
-      ref.read(internetConnectionCheckerProvider.notifier);
-  late final MonkeysRemoteDatasource remoteDatasource =
-      ref.read(monkeyRemoteDatasourceProvider);
+  late final AppDatabase database;
+  late final InternetConnectionChecker internetConnectionChecker;
+  late final MonkeysRemoteDatasource remoteDatasource;
 
   @override
-  Future<List<MonkeyDto>> build() async {
+  Future<List<MonkeyDto>> build({String? baseUrl}) async {
+    database = ref.read(databaseProvider);
+    internetConnectionChecker =
+        ref.read(internetConnectionCheckerProvider.notifier);
+    remoteDatasource = ref.read(monkeyRemoteDatasourceProvider(baseUrl ?? ""));
+
     return getAllMonkeys();
   }
 

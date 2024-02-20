@@ -6,8 +6,9 @@ import 'package:monkey_mon/src/data/datasources/dio_remote_datasource.dart';
 import 'package:monkey_mon/src/exceptions/network_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final monkeyRemoteDatasourceProvider = Provider<MonkeysRemoteDatasource>(
-  (ref) => MonkeysRemoteDatasource(),
+final monkeyRemoteDatasourceProvider =
+    Provider.family<MonkeysRemoteDatasource, String>(
+  (ref, baseUrl) => MonkeysRemoteDatasource(baseUrl: baseUrl),
 );
 
 class MonkeysRemoteDatasource extends DioRemoteDatasource {
@@ -16,9 +17,9 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
   static Duration get connectTimeout => const Duration(seconds: 10);
   static Duration get receiveTimeout => const Duration(seconds: 2);
 
-  MonkeysRemoteDatasource({super.headers})
+  MonkeysRemoteDatasource({super.headers, String baseUrl = ""})
       : super(
-            baseUrl: apiBaseUrl,
+            baseUrl: baseUrl != "" ? baseUrl : apiBaseUrl,
             sendTimeout: sendTimeout,
             connectTimeout: connectTimeout,
             receiveTimeout: receiveTimeout);

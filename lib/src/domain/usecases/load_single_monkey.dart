@@ -10,8 +10,9 @@ class LoadSingleMonkey extends _$LoadSingleMonkey {
   late final MonkeyRepository repository;
 
   @override
-  Future<MonkeyDto?> build(int id) async {
-    repository = ref.read(monkeyRepositoryImplProvider.notifier);
+  Future<MonkeyDto?> build(int id, {String? baseUrl}) async {
+    repository =
+        ref.read(monkeyRepositoryImplProvider(baseUrl: baseUrl).notifier);
     return await repository.getMonkey(id);
   }
 }

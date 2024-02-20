@@ -171,7 +171,7 @@ class ArenaFight extends _$ArenaFight {
     }
 
     if (hpToLose <= 0) {
-      return;
+      hpToLose = 1;
     }
 
     opponent = opponent!.copyWith(currentHp: opponent!.currentHp - hpToLose);
@@ -203,7 +203,7 @@ class ArenaFight extends _$ArenaFight {
     }
 
     if (hpToLose <= 0) {
-      return;
+      hpToLose = 1;
     }
 
     fighter = fighter!.copyWith(currentHp: fighter!.currentHp - hpToLose);
