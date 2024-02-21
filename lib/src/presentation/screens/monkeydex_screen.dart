@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/usecases/load_monkeys.dart';
+import 'package:monkey_mon/src/presentation/screens/mondex_detail_screen.dart';
 import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
+import 'package:monkey_mon/src/presentation/widgets/monkey_entry.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 import 'package:monkey_mon/src/presentation/widgets/swiper_widget.dart';
 
@@ -16,12 +18,13 @@ class MonkeydexScreen extends ConsumerWidget {
     return loadedPokemons.when(
       data: (data) => SwiperWidget<MonkeyDto>(
         items: data,
+        heightScale: 0.85,
         cardBuilder: (context, item) => _card(context, item),
         onTap: (index) {
-          // Navigator.push<PokedexEntryScreen>(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (_) => PokedexEntryScreen(pokemonDto: data[index])));
+          Navigator.push<MondexEntryScreen>(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => MondexEntryScreen(monkeyDto: data[index])));
         },
       ),
       error: (_, stacktrace) => const ScaffoldWithBackground(
@@ -37,10 +40,11 @@ Widget _loadingWidget() {
       child: LoadingIndicator());
 }
 
-Widget _card(BuildContext context, MonkeyDto pokemonDto) {
+Widget _card(BuildContext context, MonkeyDto monkeyDto) {
   return Card(
+    color: const Color.fromARGB(255, 83, 59, 50),
     margin: const EdgeInsets.only(bottom: 24.0),
     elevation: 8.0,
-    child: SizedBox(),
+    child: MonkeyEntry(monkeyDto: monkeyDto),
   );
 }
