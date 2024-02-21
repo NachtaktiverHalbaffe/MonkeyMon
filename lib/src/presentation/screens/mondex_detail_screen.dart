@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monkey_mon/src/core/utils/logger.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/usecases/fight_in_arena.dart';
+import 'package:monkey_mon/src/domain/usecases/update_monkey.dart';
 import 'package:monkey_mon/src/presentation/widgets/monkey_edit_modal_bottomsheet.dart';
 import 'package:monkey_mon/src/presentation/widgets/monkey_entry.dart';
 
@@ -55,8 +57,20 @@ class MondexEntryScreen extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: buttonPadding),
               child: OutlinedButton(
                   onPressed: () async {
-                    editMonkeyModalBottomSheet(
+                    final (payload, image) = await editMonkeyModalBottomSheet(
                         context: context, initialData: monkeyDto);
+                    if (payload != null) {
+                      getLogger().d("Got payload $payload");
+                      final result = await ref
+                          .read(updateMonkeyProvider(payload, image: image));
+                      result.whenData((data) {
+                        getLogger()
+                            .d("Got response ${data.toString()} from REST API");
+                      });
+
+                      return;
+                    }
+                    getLogger().d("Got empty payload $payload");
                   },
                   child: const ListTile(
                       leading: Icon(MdiIcons.pen),

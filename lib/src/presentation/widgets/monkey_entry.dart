@@ -1,6 +1,7 @@
 import 'package:auto_size_text_plus/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:monkey_mon/src/core/utils/logger.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/presentation/widgets/base_stats_bars.dart';
 
@@ -38,6 +39,15 @@ class MonkeyEntry extends StatelessWidget {
               height: imageHeight,
               imageUrl: monkeyDto.image ?? placeholderImage,
               fit: BoxFit.cover,
+              errorWidget: (context, url, error) {
+                // getLogger().e(
+                //     "CachedNetworkImage couldnt load $url . Using placeholder instead");
+                return CachedNetworkImage(
+                  height: imageHeight,
+                  imageUrl: placeholderImage,
+                  fit: BoxFit.cover,
+                );
+              },
             ),
           ),
           const SizedBox(height: 14),

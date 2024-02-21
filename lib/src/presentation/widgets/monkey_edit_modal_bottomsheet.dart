@@ -4,9 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:monkey_mon/src/domain/model/species_dto.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Future<MonkeyDto>? editMonkeyModalBottomSheet(
+Future<(MonkeyDto?, File?)> editMonkeyModalBottomSheet(
     {required BuildContext context, MonkeyDto? initialData}) async {
   TextEditingController nameTextController =
       TextEditingController(text: initialData?.name);
@@ -39,7 +40,7 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png";
   final double imageHeight = MediaQuery.of(context).size.width * 0.2;
 
-  MonkeyDto updatedData = initialData ?? const MonkeyDto(id: -1, name: "");
+  MonkeyDto? updatedData = initialData;
   File? pickedImage;
 
   await showModalBottomSheet(
@@ -80,7 +81,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
                         imageUrl: initialData?.image ?? placeholderImage,
                         fit: BoxFit.cover,
                       )
-                    : Image.file(pickedImage!),
+                    : ClipOval(
+                        child: Image.file(
+                        pickedImage!,
+                      )),
               ),
             ),
             const SizedBox(height: height),
@@ -89,7 +93,9 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
                 controller: nameTextController,
                 onChanged: (value) {
                   nameTextController.text = value;
-                  updatedData = updatedData.copyWith(name: value);
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
+                  updatedData = updatedData!.copyWith(name: value);
                 },
                 labelText: "Name",
                 helperText: "Name des Affen eingeben"),
@@ -99,7 +105,9 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
                 controller: descriptionTextController,
                 onChanged: (value) {
                   descriptionTextController.text = value;
-                  updatedData = updatedData.copyWith(description: value);
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
+                  updatedData = updatedData!.copyWith(description: value);
                 },
                 labelText: "Beschreibungstext",
                 helperText: "Beschreibenden Text zum Affen eingeben"),
@@ -109,8 +117,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               controller: speciesTextController,
               onChanged: (value) {
                 speciesTextController.text = value;
-                updatedData = updatedData.copyWith(
-                    species: updatedData.species?.copyWith(name: value));
+                updatedData ??= const MonkeyDto(
+                    id: 23444, name: "", species: SpeciesDto(name: ""));
+                updatedData = updatedData!.copyWith(
+                    species: updatedData!.species?.copyWith(name: value));
               },
               labelText: "Name der Affenspezies",
               helperText: "Namen der Affenspezies eingeben",
@@ -121,7 +131,9 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               controller: knownFromTextController,
               onChanged: (value) {
                 knownFromTextController.text = value;
-                updatedData = updatedData.copyWith(knownFrom: value);
+                updatedData ??= const MonkeyDto(
+                    id: 23444, name: "", species: SpeciesDto(name: ""));
+                updatedData = updatedData!.copyWith(knownFrom: value);
               },
               labelText: "Bekannt aus",
               helperText: "Eingeben, woher (z.B. Film) der Affe bekannt ist",
@@ -132,7 +144,9 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               controller: strengthController,
               onChanged: (value) {
                 strengthController.text = value;
-                updatedData = updatedData.copyWith(strength: value);
+                updatedData ??= const MonkeyDto(
+                    id: 23444, name: "", species: SpeciesDto(name: ""));
+                updatedData = updatedData!.copyWith(strength: value);
               },
               labelText: "Stärken",
               helperText: "Eingeben, welche Stärken der Affe hat",
@@ -143,7 +157,9 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               controller: weaknessesController,
               onChanged: (value) {
                 weaknessesController.text = value;
-                updatedData = updatedData.copyWith(weaknesses: value);
+                updatedData ??= const MonkeyDto(
+                    id: 23444, name: "", species: SpeciesDto(name: ""));
+                updatedData = updatedData!.copyWith(weaknesses: value);
               },
               labelText: "Schwächen",
               helperText: "Eingeben, welche Schwächen der Affe hat",
@@ -157,8 +173,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               onChanged: (value) {
                 hpController.text = value;
                 if (value.isNotEmpty) {
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
                   updatedData =
-                      updatedData.copyWith(hp: int.tryParse(value) ?? 0);
+                      updatedData!.copyWith(hp: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "KP",
@@ -174,8 +192,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               onChanged: (value) {
                 attackController.text = value;
                 if (value.isNotEmpty) {
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
                   updatedData =
-                      updatedData.copyWith(attack: int.tryParse(value) ?? 0);
+                      updatedData!.copyWith(attack: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "Angriff",
@@ -191,8 +211,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               onChanged: (value) {
                 defenseController.text = value;
                 if (value.isNotEmpty) {
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
                   updatedData =
-                      updatedData.copyWith(defense: int.tryParse(value) ?? 0);
+                      updatedData!.copyWith(defense: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "Verteidigung",
@@ -208,8 +230,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               onChanged: (value) {
                 specialAttackController.text = value;
                 if (value.isNotEmpty) {
-                  updatedData = updatedData.copyWith(
-                      specialAttack: int.tryParse(value) ?? 0);
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
+                  updatedData = updatedData!
+                      .copyWith(specialAttack: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "Spezial Angriff",
@@ -225,8 +249,10 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
               onChanged: (value) {
                 specialDefenseController.text = value;
                 if (value.isNotEmpty) {
-                  updatedData = updatedData.copyWith(
-                      specialDefense: int.tryParse(value) ?? 0);
+                  updatedData ??= const MonkeyDto(
+                      id: 23444, name: "", species: SpeciesDto(name: ""));
+                  updatedData = updatedData!
+                      .copyWith(specialDefense: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "Spezial Verteidigung",
@@ -241,9 +267,11 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
                   const TextInputType.numberWithOptions(signed: false),
               onChanged: (value) {
                 speedController.text = value;
+                updatedData ??= const MonkeyDto(
+                    id: 23444, name: "", species: SpeciesDto(name: ""));
                 if (value.isNotEmpty) {
                   updatedData =
-                      updatedData.copyWith(speed: int.tryParse(value) ?? 0);
+                      updatedData!.copyWith(speed: int.tryParse(value) ?? 0);
                 }
               },
               labelText: "Initiative",
@@ -263,7 +291,7 @@ Future<MonkeyDto>? editMonkeyModalBottomSheet(
     },
   );
 
-  return updatedData;
+  return (updatedData, pickedImage);
 }
 
 TextField _textField(

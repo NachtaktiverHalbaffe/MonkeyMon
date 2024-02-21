@@ -136,7 +136,7 @@ class BaseStatsItemWidget extends StatelessWidget {
                   //color: Colors.red,
                 ),
                 FractionallySizedBox(
-                  widthFactor: barPercentage,
+                  widthFactor: barPercentage <= 1.0 ? barPercentage : 1.0,
                   child: AnimatedContainer(
                     duration: const Duration(seconds: 1),
                     height: 10,

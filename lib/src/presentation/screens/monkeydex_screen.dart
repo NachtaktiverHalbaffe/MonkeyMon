@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
+import 'package:monkey_mon/src/domain/usecases/create_monkey.dart';
 import 'package:monkey_mon/src/domain/usecases/load_monkeys.dart';
 import 'package:monkey_mon/src/presentation/screens/mondex_detail_screen.dart';
 import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
+import 'package:monkey_mon/src/presentation/widgets/monkey_edit_modal_bottomsheet.dart';
 import 'package:monkey_mon/src/presentation/widgets/monkey_entry.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 import 'package:monkey_mon/src/presentation/widgets/swiper_widget.dart';
@@ -26,6 +28,23 @@ class MonkeydexScreen extends ConsumerWidget {
               MaterialPageRoute(
                   builder: (_) => MondexEntryScreen(monkeyDto: data[index])));
         },
+        footerChilds: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: GestureDetector(
+              onTap: () async {
+                final (monkeyDto, image) =
+                    await editMonkeyModalBottomSheet(context: context);
+                if (monkeyDto != null) {
+                  ref.read(createMonkeyProvider(monkeyDto, image: image));
+                }
+              },
+              child: Text(
+                "+ Eintrag erstellen",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold),
+              ),
+            )),
       ),
       error: (_, stacktrace) => const ScaffoldWithBackground(
           assetPath: "assets/images/pokemon_background.jpg"),

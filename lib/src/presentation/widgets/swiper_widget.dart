@@ -9,6 +9,7 @@ class SwiperWidget<T> extends StatefulWidget {
   final double? heightScale;
   final double? widthScale;
   final Widget Function(BuildContext, T) cardBuilder;
+  final Widget? footerChilds;
   final void Function(int) onTap;
   const SwiperWidget(
       {super.key,
@@ -17,7 +18,8 @@ class SwiperWidget<T> extends StatefulWidget {
       required this.onTap,
       this.backgroundImage,
       this.heightScale,
-      this.widthScale});
+      this.widthScale,
+      this.footerChilds});
 
   @override
   State<SwiperWidget> createState() => _SwiperWidgetState(
@@ -26,7 +28,8 @@ class SwiperWidget<T> extends StatefulWidget {
       onTap,
       backgroundImage ?? "assets/images/pokemon_background.jpg",
       heightScale,
-      widthScale);
+      widthScale,
+      footerChilds);
 }
 
 class _SwiperWidgetState<T> extends State<SwiperWidget> {
@@ -36,11 +39,18 @@ class _SwiperWidgetState<T> extends State<SwiperWidget> {
   final double? heightScale;
   final double? widthScale;
   final void Function(int) onTap;
+  final Widget? footerChilds;
 
   int currentIndex = 0;
 
-  _SwiperWidgetState(this.items, this.cardBuilder, this.onTap,
-      this.backgroundImage, this.heightScale, this.widthScale);
+  _SwiperWidgetState(
+      this.items,
+      this.cardBuilder,
+      this.onTap,
+      this.backgroundImage,
+      this.heightScale,
+      this.widthScale,
+      this.footerChilds);
 
   void _setCurrentIndex(int index) {
     Future.delayed(Duration.zero, () async {
@@ -85,25 +95,35 @@ class _SwiperWidgetState<T> extends State<SwiperWidget> {
                   },
                 )
               : const Center(),
-          const SizedBox(height: 12),
-          AutoSizeText(
-            "$currentIndex/${items.length}",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 6.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
+          footerChilds != null
+              ? const SizedBox(height: 12)
+              : const SizedBox(height: 0),
+          Row(
+            // verticalDirection: VerticalDirection.up,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AutoSizeText(
+                "$currentIndex/${items.length}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 6.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 6.0,
+                      color: Color.fromARGB(125, 0, 0, 255),
+                    ),
+                  ],
                 ),
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 6.0,
-                  color: Color.fromARGB(125, 0, 0, 255),
-                ),
-              ],
-            ),
+              ),
+              footerChilds ?? const SizedBox(width: 0, height: 0)
+            ],
           )
         ],
       ),
