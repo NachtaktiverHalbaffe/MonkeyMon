@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:monkey_mon/src/core/utils/internet_connection_checker.dart';
+import 'package:monkey_mon/src/core/utils/logger.dart';
 import 'package:monkey_mon/src/data/datasources/monkeys_remote_datasource.dart';
 import 'package:monkey_mon/src/data/mapper/species_mapper.dart';
 import 'package:monkey_mon/src/domain/repository/monkey_repository.dart';
@@ -30,25 +33,52 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
   @override
   Future<MonkeyDto?> createMonkey(
-      {required MonkeyDto monkeyDto, SpeciesDto? speciesDto}) async {
+      {required MonkeyDto monkeyDto,
+      SpeciesDto? speciesDto,
+      File? image}) async {
+    MonkeyDto? createdMonkeyDto;
     final MonkeysCompanion monkeysCompanion =
         MonkeyMapper.mapFromDto(monkeyDto);
 
-    if (speciesDto != null) {
-      final createdMonkey = await database.createMonkeyWithSpeciesInformation(
-          monkeysCompanion, SpeciesMapper.mapFromDto(speciesDto));
+    if (await internetConnectionChecker.isConnected()) {
+      // Also create in REST API
+      final (createdMonkey, createdSpecies) =
+          await remoteDatasource.createMonkey(monkeysCompanion, image: image);
       if (createdMonkey != null) {
-        return MonkeyMapper.mapToDto(createdMonkey, species: speciesDto);
+        if (createdSpecies != null) {
+          createdMonkeyDto = MonkeyMapper.mapToDto(createdMonkey,
+              species: SpeciesMapper.mapToDto(createdSpecies));
+          // Caching
+          await database.createMonkeyWithSpeciesInformation(
+              MonkeyMapper.mapToCompanion(createdMonkey),
+              SpeciesMapper.mapToCompanion(createdSpecies));
+        } else {
+          createdMonkeyDto = MonkeyMapper.mapToDto(createdMonkey);
+          // Caching
+          await database.monkeysDao.createMonkey(
+            MonkeyMapper.mapToCompanion(createdMonkey),
+          );
+        }
       }
     } else {
-      final createdMonkey =
-          await database.monkeysDao.createMonkey(monkeysCompanion);
-      if (createdMonkey != null) {
-        return MonkeyMapper.mapToDto(createdMonkey);
+      // Offline creation
+      if (speciesDto != null) {
+        final createdMonkey = await database.createMonkeyWithSpeciesInformation(
+            monkeysCompanion, SpeciesMapper.mapFromDto(speciesDto));
+        if (createdMonkey != null) {
+          createdMonkeyDto =
+              MonkeyMapper.mapToDto(createdMonkey, species: speciesDto);
+        }
+      } else {
+        final createdMonkey =
+            await database.monkeysDao.createMonkey(monkeysCompanion);
+        if (createdMonkey != null) {
+          createdMonkeyDto = MonkeyMapper.mapToDto(createdMonkey);
+        }
       }
     }
 
-    return null;
+    return createdMonkeyDto;
   }
 
   @override
@@ -60,12 +90,12 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
   @override
   Future<List<MonkeyDto>> getAllMonkeys() async {
     List<Monkey> monkeys = List.empty(growable: true);
-
     if (await internetConnectionChecker.isConnected()) {
       List<SingleSpecies> species = List.empty(growable: true);
       try {
         (monkeys, species) = await remoteDatasource.getAllMonkeys();
-      } on Exception {
+      } on Exception catch (e) {
+        getLogger().w(e);
         return List.empty();
       }
 
@@ -76,11 +106,18 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
       // Caching
       for (int i = 0; i < monkeyCompanions.length; i++) {
-        await database.createMonkeyWithSpeciesInformation(
-            monkeyCompanions[i], speciesCompanions[i]);
+        try {
+          await database.createMonkeyWithSpeciesInformation(
+              monkeyCompanions[i], speciesCompanions[i]);
+        } catch (e) {
+          getLogger().d("Entry already present, refreshing caching needed");
+          await deleteMonkey(monkeyCompanions[i].id.value);
+          await database.speciesDao
+              .deleteSpecies(speciesCompanions[i].name.value);
+          await database.createMonkeyWithSpeciesInformation(
+              monkeyCompanions[i], speciesCompanions[i]);
+        }
       }
-
-      print("got monkeys from remote");
 
       return MonkeyMapper.mapToDtoList(monkeys,
           species: SpeciesMapper.mapToDtoList(species));
@@ -125,24 +162,41 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
   @override
   Future<MonkeyDto?> updateMonkey(
-      {required MonkeyDto monkeyDto, SpeciesDto? speciesDto}) async {
+      {required MonkeyDto monkeyDto, File? image}) async {
+    MonkeyDto? updatedMonkeyDto;
+    print(monkeyDto);
     final MonkeysCompanion monkeysCompanion =
         MonkeyMapper.mapFromDto(monkeyDto);
 
-    if (speciesDto != null) {
-      Monkey? updatedMonkey = await database.updateMonkeyWithSpeciesInformation(
-          monkeysCompanion, SpeciesMapper.mapFromDto(speciesDto));
+    if (await internetConnectionChecker.isConnected()) {
+      getLogger().d("Updating monkey in REST API backend");
+      // Also create in REST API
+      final (updatedMonkey, updatedSpecies) =
+          await remoteDatasource.updateMonkey(monkeysCompanion, image: image);
       if (updatedMonkey != null) {
-        return MonkeyMapper.mapToDto(updatedMonkey, species: speciesDto);
+        if (updatedSpecies != null) {
+          updatedMonkeyDto = MonkeyMapper.mapToDto(updatedMonkey,
+              species: SpeciesMapper.mapToDto(updatedSpecies));
+          // Caching
+          await database.updateMonkeyWithSpeciesInformation(
+              MonkeyMapper.mapToCompanion(updatedMonkey),
+              SpeciesMapper.mapToCompanion(updatedSpecies));
+        } else {
+          updatedMonkeyDto = MonkeyMapper.mapToDto(updatedMonkey);
+          // Caching
+          await database.monkeysDao.updateMonkey(
+            MonkeyMapper.mapToCompanion(updatedMonkey),
+          );
+        }
       }
     } else {
       Monkey? updatedMonkey =
           await database.monkeysDao.updateMonkey(monkeysCompanion);
       if (updatedMonkey != null) {
-        return MonkeyMapper.mapToDto(updatedMonkey);
+        updatedMonkeyDto = MonkeyMapper.mapToDto(updatedMonkey);
       }
     }
 
-    return null;
+    return updatedMonkeyDto;
   }
 }

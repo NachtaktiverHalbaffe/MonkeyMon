@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "load_monkeys.g.dart";
 
-@Riverpod(keepAlive: true)
+@riverpod
 class LoadMonkeys extends _$LoadMonkeys {
   late final MonkeyRepository repository;
 
@@ -13,6 +13,8 @@ class LoadMonkeys extends _$LoadMonkeys {
   Future<List<MonkeyDto>> build({String? baseUrl}) async {
     repository =
         ref.read(monkeyRepositoryImplProvider(baseUrl: baseUrl).notifier);
-    return await repository.getAllMonkeys();
+    final monkeys = await repository.getAllMonkeys();
+    print(monkeys);
+    return monkeys;
   }
 }
