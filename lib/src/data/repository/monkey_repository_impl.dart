@@ -59,9 +59,9 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
 
   @override
   Future<List<MonkeyDto>> getAllMonkeys() async {
-    List<Monkey> monkeys = await database.monkeysDao.getAllMonkeys();
+    List<Monkey> monkeys = List.empty(growable: true);
 
-    if (monkeys.isEmpty && await internetConnectionChecker.isConnected()) {
+    if (await internetConnectionChecker.isConnected()) {
       List<SingleSpecies> species = List.empty(growable: true);
       try {
         (monkeys, species) = await remoteDatasource.getAllMonkeys();
@@ -80,8 +80,12 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
             monkeyCompanions[i], speciesCompanions[i]);
       }
 
+      print("got monkeys from remote");
+
       return MonkeyMapper.mapToDtoList(monkeys,
           species: SpeciesMapper.mapToDtoList(species));
+    } else {
+      monkeys.addAll(await database.monkeysDao.getAllMonkeys());
     }
 
     return MonkeyMapper.mapToDtoList(monkeys);

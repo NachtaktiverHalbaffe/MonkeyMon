@@ -11,6 +11,7 @@ class Monkeys extends Table {
   TextColumn get description => text().nullable()();
   TextColumn get strength => text().nullable()();
   TextColumn get weaknesses => text().nullable()();
+  TextColumn get image => text().nullable()();
   IntColumn get attack =>
       integer().check(attack.isBiggerOrEqual(const Constant(0))).nullable()();
   IntColumn get defense =>

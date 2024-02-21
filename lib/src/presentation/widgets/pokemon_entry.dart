@@ -11,7 +11,7 @@ class PokemonEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double imageHeight = MediaQuery.of(context).size.height * 0.25;
-    final String placeholderImage =
+    const String placeholderImage =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png";
 
     List<Widget> nameWidgetRow = List.empty(growable: true);
@@ -57,13 +57,21 @@ class PokemonEntry extends StatelessWidget {
           const SizedBox(height: 12),
           AutoSizeText(
             pokemonDto.description ?? "",
-            minFontSize: 15,
+            // minFontSize: 15,
             maxLines: 3,
+            style: const TextStyle(fontSize: 15),
             textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 12),
           const Divider(),
-          BaseStatsBars(pokemon: pokemonDto),
+          BaseStatsBars(
+            hp: pokemonDto.hp,
+            attack: pokemonDto.attack,
+            defense: pokemonDto.defense,
+            specialAttack: pokemonDto.specialAttack,
+            specialDefense: pokemonDto.specialDefense,
+            speed: pokemonDto.speed,
+          ),
         ],
       ),
     );

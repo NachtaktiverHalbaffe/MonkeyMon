@@ -1,12 +1,23 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
-import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 
 class BaseStatsBars extends StatelessWidget {
-  final PokemonDto pokemon;
+  final int? hp;
+  final int? attack;
+  final int? defense;
+  final int? specialAttack;
+  final int? specialDefense;
+  final int? speed;
 
-  const BaseStatsBars({super.key, required this.pokemon});
+  const BaseStatsBars(
+      {super.key,
+      this.hp,
+      this.attack,
+      this.defense,
+      this.specialAttack,
+      this.specialDefense,
+      this.speed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +27,28 @@ class BaseStatsBars extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            hp: hp,
             maxValue: 300,
             title: "Kp",
           ),
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            attack: attack,
             title: "Angriff",
           ),
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            defense: defense,
             title: "Verteidigung",
           ),
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            specialAttack: specialAttack,
             title: "Sp. Angriff",
           ),
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            specialDefense: specialDefense,
             title: "Sp. Verteidigung",
           ),
           BaseStatsItemWidget(
-            pokemon: pokemon,
+            speed: speed,
             title: "Initiative",
           ),
         ],
@@ -49,13 +60,23 @@ class BaseStatsBars extends StatelessWidget {
 class BaseStatsItemWidget extends StatelessWidget {
   final String title;
   final int maxValue;
-  final PokemonDto pokemon;
+  final int? hp;
+  final int? attack;
+  final int? defense;
+  final int? specialAttack;
+  final int? specialDefense;
+  final int? speed;
 
   const BaseStatsItemWidget(
       {Key? key,
       required this.title,
-      required this.pokemon,
-      this.maxValue = 200})
+      this.maxValue = 200,
+      this.hp,
+      this.attack,
+      this.defense,
+      this.specialAttack,
+      this.specialDefense,
+      this.speed})
       : super(key: key);
 
   double get barPercentage => value() / maxValue;
@@ -63,17 +84,17 @@ class BaseStatsItemWidget extends StatelessWidget {
   int value() {
     switch (title.toLowerCase()) {
       case "kp":
-        return pokemon.hp;
+        return hp ?? 0;
       case "angriff":
-        return pokemon.attack;
+        return attack ?? 0;
       case "verteidigung":
-        return pokemon.defense;
+        return defense ?? 0;
       case "sp. angriff":
-        return pokemon.specialAttack;
+        return specialAttack ?? 0;
       case "sp. verteidigung":
-        return pokemon.specialDefense;
+        return specialDefense ?? 0;
       case "initiative":
-        return pokemon.speed;
+        return speed ?? 0;
       default:
         return 0;
     }
@@ -109,7 +130,7 @@ class BaseStatsItemWidget extends StatelessWidget {
                 Container(
                   height: 10,
                   decoration: BoxDecoration(
-                    color: Color(0xFFF4F5F4),
+                    color: const Color(0xFFF4F5F4),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   //color: Colors.red,
@@ -117,7 +138,7 @@ class BaseStatsItemWidget extends StatelessWidget {
                 FractionallySizedBox(
                   widthFactor: barPercentage,
                   child: AnimatedContainer(
-                    duration: Duration(seconds: 3),
+                    duration: const Duration(seconds: 1),
                     height: 10,
                     decoration: BoxDecoration(
                       color: baseStatsBar(barPercentage),

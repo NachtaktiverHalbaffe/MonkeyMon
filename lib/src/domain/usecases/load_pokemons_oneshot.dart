@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "load_pokemons_oneshot.g.dart";
 
-@Riverpod(keepAlive: true)
+@riverpod
 class LoadPokemonsOneshot extends _$LoadPokemonsOneshot {
   @override
   Future<List<PokemonDto>> build() async {

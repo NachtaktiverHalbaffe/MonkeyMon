@@ -7,7 +7,7 @@ import 'package:monkey_mon/src/exceptions/network_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 final monkeyRemoteDatasourceProvider =
-    Provider.family<MonkeysRemoteDatasource, String>(
+    Provider.autoDispose.family<MonkeysRemoteDatasource, String>(
   (ref, baseUrl) => MonkeysRemoteDatasource(baseUrl: baseUrl),
 );
 
@@ -80,6 +80,7 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
       name: jsonPayload["name"] as String,
       knownFrom: jsonPayload["known_from"] as String,
       description: jsonPayload["description"] as String,
+      image: jsonPayload["image"] as String,
       strength: jsonPayload["strength"] as String,
       weaknesses: jsonPayload["weaknesses"] as String,
       attack: jsonPayload["attack"] as int,

@@ -11,6 +11,7 @@ class MonkeyMapper {
         name: monkey.name,
         knownFrom: monkey.knownFrom,
         description: monkey.description,
+        image: monkey.image,
         strength: monkey.strength,
         weaknesses: monkey.weaknesses,
         attack: monkey.attack ?? 0,

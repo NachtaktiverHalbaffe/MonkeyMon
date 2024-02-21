@@ -1,10 +1,8 @@
 import 'package:cancellation_token/cancellation_token.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/domain/usecases/load_pokemons.dart';
-import 'package:auto_size_text_plus/auto_size_text.dart';
 import 'package:monkey_mon/src/domain/usecases/load_pokemons_oneshot.dart';
 import 'package:monkey_mon/src/domain/usecases/pokemon_needs_remote_fetching.dart';
 import 'package:monkey_mon/src/presentation/screens/pokedex_detail_screen.dart';

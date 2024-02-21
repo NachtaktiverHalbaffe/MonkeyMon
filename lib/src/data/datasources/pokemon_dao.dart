@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:monkey_mon/src/data/datasources/app_database.dart';
 import '../entity/pokemon.dart';
+import 'app_database.dart';
 
 part "pokemon_dao.g.dart";
 

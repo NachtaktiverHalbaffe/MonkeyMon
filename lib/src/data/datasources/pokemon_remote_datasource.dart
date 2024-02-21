@@ -7,7 +7,8 @@ import 'package:monkey_mon/src/exceptions/network_exception.dart';
 import 'package:pokedex/pokedex.dart' as pokedex_api;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final pokemonRemoteDatasourceProvider = Provider<PokemonRemoteDatasource>(
+final pokemonRemoteDatasourceProvider =
+    Provider.autoDispose<PokemonRemoteDatasource>(
   (ref) => PokemonRemoteDatasource(),
 );
 

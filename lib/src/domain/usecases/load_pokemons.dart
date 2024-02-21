@@ -12,12 +12,14 @@ class LoadPokemons extends _$LoadPokemons {
   Stream<PokemonDto> build({CancellationToken? cancellationToken}) async* {
     PokemonRepository repository =
         ref.read(pokemonRepositoryImplProvider.notifier);
+    final stream =
+        repository.streamAllPokemon(cancellationToken: cancellationToken);
     ref.onDispose(() {
       if (cancellationToken != null) {
         cancellationToken.cancel();
       }
     });
 
-    yield* repository.streamAllPokemon(cancellationToken: cancellationToken);
+    yield* stream;
   }
 }

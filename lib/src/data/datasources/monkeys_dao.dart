@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:monkey_mon/src/data/datasources/app_database.dart';
 
 import '../entity/monkeys.dart';
+import 'app_database.dart';
 part "monkeys_dao.g.dart";
 
 @DriftAccessor(tables: [Monkeys])
