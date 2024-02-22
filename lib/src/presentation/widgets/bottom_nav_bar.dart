@@ -67,8 +67,10 @@ class BottonNavBar extends StatelessWidget {
       bottomBarWidth: MediaQuery.of(context).size.width,
       onTap: onTap,
       kIconSize: 24.0,
-      shadowElevation:
-          ThemeManager.of(context).brightness == Brightness.light ? 8 : 0,
+      shadowElevation: ThemeManager.of(context).state.themeData.brightness ==
+              Brightness.light
+          ? 8
+          : 0,
       kBottomRadius: 28.0,
       itemLabelStyle: Theme.of(context)
           .textTheme

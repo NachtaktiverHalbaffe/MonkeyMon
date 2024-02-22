@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+// ignore: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

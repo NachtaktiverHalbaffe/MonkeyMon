@@ -16,5 +16,6 @@ void main() async {
   } else {
     Logger.level = Level.warning;
   }
+
   runApp(const ProviderScope(child: MyApp()));
 }

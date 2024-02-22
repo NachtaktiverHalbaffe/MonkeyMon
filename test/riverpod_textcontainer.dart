@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+// ignore: depend_on_referenced_packages
 import 'package:riverpod/riverpod.dart';
 
 /// A testing utility which creates a [ProviderContainer] and automatically

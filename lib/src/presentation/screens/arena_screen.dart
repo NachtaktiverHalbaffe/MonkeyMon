@@ -7,7 +7,6 @@ import 'package:monkey_mon/src/domain/model/mon.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/domain/model/pokemon_dto.dart';
 import 'package:monkey_mon/src/domain/usecases/fight_in_arena.dart';
-import 'package:monkey_mon/src/presentation/widgets/loading_indicator.dart';
 import 'package:monkey_mon/src/presentation/widgets/scaffold_with_background.dart';
 
 class ArenaScreen extends ConsumerWidget {
@@ -140,6 +139,13 @@ class ArenaScreen extends ConsumerWidget {
       fit: BoxFit.fitHeight,
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.height * 0.3,
+      errorWidget: (context, imageUrl, _) => CachedNetworkImage(
+        imageUrl:
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png",
+        fit: BoxFit.fitHeight,
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.height * 0.3,
+      ),
       imageBuilder: (context, imageProvider) {
         return ImagePixels(
             imageProvider: imageProvider,
@@ -304,7 +310,7 @@ class ArenaScreen extends ConsumerWidget {
     } else if (percentage < 0.4998) {
       return const Color(0xFFFFDD57);
     } else {
-      return Color.fromARGB(255, 7, 197, 54);
+      return const Color.fromARGB(255, 7, 197, 54);
     }
   }
 }

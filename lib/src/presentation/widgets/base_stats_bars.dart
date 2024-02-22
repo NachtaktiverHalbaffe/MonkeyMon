@@ -68,7 +68,7 @@ class BaseStatsItemWidget extends StatelessWidget {
   final int? speed;
 
   const BaseStatsItemWidget(
-      {Key? key,
+      {super.key,
       required this.title,
       this.maxValue = 200,
       this.hp,
@@ -76,8 +76,7 @@ class BaseStatsItemWidget extends StatelessWidget {
       this.defense,
       this.specialAttack,
       this.specialDefense,
-      this.speed})
-      : super(key: key);
+      this.speed});
 
   double get barPercentage => value() / maxValue;
 
@@ -113,14 +112,14 @@ class BaseStatsItemWidget extends StatelessWidget {
             width: 135,
             child: Opacity(
               opacity: 0.7,
-              child: Text(title, style: textTheme.bodyText1),
+              child: Text(title, style: textTheme.bodyLarge),
             ),
           ),
           Container(
             width: 40,
             child: Text(
               value().toString(),
-              style: textTheme.bodyText1,
+              style: textTheme.bodyLarge,
             ),
           ),
           Flexible(

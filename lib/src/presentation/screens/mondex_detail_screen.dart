@@ -61,8 +61,8 @@ class MondexEntryScreen extends ConsumerWidget {
                         context: context, initialData: monkeyDto);
                     if (payload != null) {
                       getLogger().d("Got payload $payload");
-                      final result = await ref
-                          .read(updateMonkeyProvider(payload, image: image));
+                      final result =
+                          ref.read(updateMonkeyProvider(payload, image: image));
                       result.whenData((data) {
                         getLogger()
                             .d("Got response ${data.toString()} from REST API");

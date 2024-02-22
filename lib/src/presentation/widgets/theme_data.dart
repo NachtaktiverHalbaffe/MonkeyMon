@@ -1,6 +1,8 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:flutter/material.dart';
 
-final Color primaryColor = const Color.fromARGB(255, 139, 15, 6);
+const Color primaryColor = Color.fromARGB(255, 139, 15, 6);
 
 ThemeData darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
   colorScheme: const ColorScheme.dark().copyWith(

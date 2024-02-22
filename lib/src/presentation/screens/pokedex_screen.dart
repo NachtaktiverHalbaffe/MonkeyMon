@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:cancellation_token/cancellation_token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +37,7 @@ class PokedexScreen extends ConsumerWidget {
 }
 
 class _PokemonScreenOneshot extends ConsumerWidget {
-  const _PokemonScreenOneshot({super.key});
+  const _PokemonScreenOneshot();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +65,7 @@ class _PokemonScreenOneshot extends ConsumerWidget {
 }
 
 class _PokemonScreenStreaming extends ConsumerWidget {
-  _PokemonScreenStreaming({super.key});
+  _PokemonScreenStreaming();
 
   final CancellationToken cancellationToken = CancellationToken();
   final List<PokemonDto> pokemons = List.empty(growable: true);

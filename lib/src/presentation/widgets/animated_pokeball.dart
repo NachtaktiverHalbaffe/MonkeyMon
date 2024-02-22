@@ -9,8 +9,7 @@ class AnimatedPokeballWidget extends StatefulWidget {
   final double size;
 
   const AnimatedPokeballWidget(
-      {Key? key, required this.color, required this.size})
-      : super(key: key);
+      {super.key, required this.color, required this.size});
 
   @override
   State<AnimatedPokeballWidget> createState() => _AnimatedPokeballWidgetState();

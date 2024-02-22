@@ -1,7 +1,8 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:auto_size_text_plus/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:monkey_mon/src/core/utils/logger.dart';
 import 'package:monkey_mon/src/domain/model/monkey_dto.dart';
 import 'package:monkey_mon/src/presentation/widgets/base_stats_bars.dart';
 
@@ -76,10 +77,11 @@ class MonkeyEntry extends StatelessWidget {
             textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 4),
-          _additionalInfoText("Affen-Spezies", monkeyDto.species?.name),
-          _additionalInfoText("Bekannt aus", monkeyDto.knownFrom),
-          _additionalInfoText("Stärken", monkeyDto.strength),
-          _additionalInfoText("Schwächen", monkeyDto.weaknesses),
+          _additionalInfoText(
+              context, "Affen-Spezies", monkeyDto.species?.name),
+          _additionalInfoText(context, "Bekannt aus", monkeyDto.knownFrom),
+          _additionalInfoText(context, "Stärken", monkeyDto.strength),
+          _additionalInfoText(context, "Schwächen", monkeyDto.weaknesses),
           const SizedBox(height: 12),
           const Divider(),
           BaseStatsBars(
@@ -95,9 +97,10 @@ class MonkeyEntry extends StatelessWidget {
     );
   }
 
-  Widget _additionalInfoText(String label, String? infoText) {
+  Widget _additionalInfoText(
+      BuildContext context, String label, String? infoText) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
           infoText != null
@@ -106,10 +109,13 @@ class MonkeyEntry extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: "$label: ",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(fontWeight: FontWeight.bold)),
                       TextSpan(
-                        text: infoText,
-                      ),
+                          text: infoText,
+                          style: Theme.of(context).textTheme.bodyLarge!),
                     ],
                   ),
                 )

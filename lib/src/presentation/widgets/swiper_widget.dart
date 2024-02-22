@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state, unnecessary_this
+
 import 'package:auto_size_text_plus/auto_size_text.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';

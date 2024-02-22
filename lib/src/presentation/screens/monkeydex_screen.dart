@@ -61,7 +61,8 @@ Widget _loadingWidget() {
 
 Widget _card(BuildContext context, MonkeyDto monkeyDto) {
   return Card(
-    color: const Color.fromARGB(255, 83, 59, 50),
+    surfaceTintColor: Colors.transparent,
+    color: const Color.fromARGB(255, 112, 86, 78),
     margin: const EdgeInsets.only(bottom: 24.0),
     elevation: 8.0,
     child: MonkeyEntry(monkeyDto: monkeyDto),
