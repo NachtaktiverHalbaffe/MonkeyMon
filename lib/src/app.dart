@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ThemeManager(
       defaultBrightnessPreference: BrightnessPreference.system,
-      loadBrightnessOnStart: true,
       data: (Brightness brightness) {
         switch (brightness) {
           case Brightness.dark:
@@ -30,8 +29,7 @@ class MyApp extends StatelessWidget {
             return darkTheme;
         }
       },
-      themedWidgetBuilder: (BuildContext context, ThemeData theme) =>
-          MaterialApp(
+      themedBuilder: (BuildContext context, ThemeState theme) => MaterialApp(
         // Providing a restorationScopeId allows the Navigator built by the
         // MaterialApp to restore the navigation stack when a user leaves and
         // returns to the app after it has been killed while running in the
@@ -62,7 +60,7 @@ class MyApp extends StatelessWidget {
         // Define a light and dark color theme. Then, read the user's
         // preferred ThemeMode (light, dark, or system default) from the
         // SettingsController to display the correct theme.
-        theme: theme,
+        theme: theme.themeData,
         home: const HomeScreen(),
       ),
     );

@@ -47,15 +47,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               switch (value) {
                 case "dark":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.dark);
+                      .setBrightness(BrightnessPreference.dark);
                   return;
                 case "light":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.light);
+                      .setBrightness(BrightnessPreference.light);
                   return;
                 case "system":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.system);
+                      .setBrightness(BrightnessPreference.system);
                   return;
                 default:
               }
@@ -72,15 +72,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               switch (value) {
                 case "dark":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.dark);
+                      .setBrightness(BrightnessPreference.dark);
                   return;
                 case "light":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.light);
+                      .setBrightness(BrightnessPreference.light);
                   return;
                 case "system":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.system);
+                      .setBrightness(BrightnessPreference.system);
                   return;
                 default:
               }
@@ -97,15 +97,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               switch (value) {
                 case "dark":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.dark);
+                      .setBrightness(BrightnessPreference.dark);
                   return;
                 case "light":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.light);
+                      .setBrightness(BrightnessPreference.light);
                   return;
                 case "system":
                   ThemeManager.of(context)
-                      .setBrightnessPreference(BrightnessPreference.system);
+                      .setBrightness(BrightnessPreference.system);
                   return;
                 default:
               }

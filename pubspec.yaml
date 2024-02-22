@@ -2,12 +2,12 @@ name: monkey_mon
 description: "A example Flutter project where you can interact with Monkey"
 
 # Prevent accidental publishing to pub.dev.
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
   flutter:
@@ -29,8 +29,8 @@ dependencies:
   json_annotation: ^4.8.1
 
   # Dio (http requests)
-  dio: ^5.4.0
-  talker_dio_logger: ^4.0.1
+  dio: ^5.4.1
+  talker_dio_logger: ^4.0.2
 
   # Utils
   internet_connection_checker_plus: ^2.2.0
@@ -42,7 +42,7 @@ dependencies:
   # Widgets
   animated_notch_bottom_bar: ^1.0.1
   flutter_material_design_icons: ^1.1.7447
-  theme_manager: ^1.1.1
+  theme_manager: ^2.0.4
   card_swiper: ^3.0.1
   cached_network_image: ^3.3.1
   auto_size_text_plus: ^3.0.1
@@ -57,7 +57,7 @@ dev_dependencies:
   # Drift
   drift_dev: ^2.15.0
   # Riverpod
-  custom_lint:
+  custom_lint: 0.6.2
   riverpod_generator: ^2.3.11
   riverpod_lint: ^2.3.9
   freezed: ^2.4.7
@@ -67,7 +67,7 @@ dev_dependencies:
   http_mock_adapter: ^0.6.1
 
   # Auto generation of app metadata
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: ^0.13.1
   launcher_name: ^1.0.2
   flutter_native_splash: ^2.3.10
 
@@ -111,7 +111,7 @@ flutter_native_splash:
   background_image: "assets/images/arena_background.jpg"
   # The image parameter allows you to specify an image used in the splash screen.  It must be a
   # png file and should be sized for 4x pixel density.
-  image:  "assets/icon/icon.png"
+  image: "assets/icon/icon.png"
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
