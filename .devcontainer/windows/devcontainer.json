@@ -1,0 +1,55 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/lucashilles/flutter-dev-container
+{
+	"name": "Flutter",
+	"dockerFile": "../Dockerfile",
+	// Set *default* container specific settings.json values on container create.
+	// Add the IDs of extensions you want installed when the container is created.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dart-code.dart-code",
+				"dart-code.flutter",
+				"gruntfuggly.todo-tree",
+				"aaron-bond.better-comments",
+				"usernamehw.errorlens",
+				"jeroen-meijer.pubspec-assist",
+				"nash.awesome-flutter-snippets",
+				"alexisvt.flutter-snippets",
+				"rangav.vscode-thunder-client",
+				"robert-brunhage.flutter-riverpod-snippets"
+			],
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash"
+			}
+		}
+	},
+	"containerEnv": {
+		"DISPLAY": ":0",
+		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+		"LIBGL_ALWAYS_SOFTWARE": "1",
+	},
+	"runArgs": [
+		"--net=host",
+		"--privileged",
+		"-v",
+		"/dev/bus/usb:/dev/bus/usb",
+		"--device",
+		"/dev/kvm",
+		"--device",
+		"/dev/dri:/dev/dri",
+		"-v",
+		"/tmp/.X11-unix:/tmp/.X11-unix",
+		"-e",
+		"DISPLAY=:0"
+	],
+	// This command create an example project after the container is created.
+	"postCreateCommand": "flutter pub get",
+	"initializeCommand": "xhost +local:root"
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	//"forwardPorts": [],
+	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+}
