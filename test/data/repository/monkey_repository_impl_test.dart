@@ -343,8 +343,8 @@ void main() {
 
       await sut.createMonkey(
           monkeyDto: generateMonkeyDto(), speciesDto: testDataSpecies);
-      final MonkeyDto? result = await sut.updateMonkey(
-          monkeyDto: testDataMonkey, speciesDto: testDataSpecies);
+      final MonkeyDto? result =
+          await sut.updateMonkey(monkeyDto: testDataMonkey);
 
       expect(result, expectedResult);
     });
@@ -358,10 +358,8 @@ void main() {
       sut = testContainer.read(monkeyRepositoryImplProvider().notifier);
       final MonkeyDto testData =
           generateMonkeyDto().copyWith(name: "Felix", id: 5);
-      final SpeciesDto testDataSpecies = generateSpeciesDto();
 
-      final MonkeyDto? result = await sut.updateMonkey(
-          monkeyDto: testData, speciesDto: testDataSpecies);
+      final MonkeyDto? result = await sut.updateMonkey(monkeyDto: testData);
 
       expect(result, isNull);
     });

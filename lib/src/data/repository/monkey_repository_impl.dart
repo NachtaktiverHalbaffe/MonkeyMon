@@ -90,7 +90,9 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
   @override
   Future<List<MonkeyDto>> getAllMonkeys() async {
     List<Monkey> monkeys = List.empty(growable: true);
+
     if (await internetConnectionChecker.isConnected()) {
+      getLogger().d("Retrieving all monkeys from REST API");
       List<SingleSpecies> species = List.empty(growable: true);
       try {
         (monkeys, species) = await remoteDatasource.getAllMonkeys();
@@ -98,6 +100,8 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
         getLogger().w(e);
         return List.empty();
       }
+
+      getLogger().d("Retrieved data for all monkeys from REST API");
 
       List<MonkeysCompanion> monkeyCompanions =
           MonkeyMapper.mapToCompanionList(monkeys);
@@ -164,7 +168,6 @@ class MonkeyRepositoryImpl extends _$MonkeyRepositoryImpl
   Future<MonkeyDto?> updateMonkey(
       {required MonkeyDto monkeyDto, File? image}) async {
     MonkeyDto? updatedMonkeyDto;
-    print(monkeyDto);
     final MonkeysCompanion monkeysCompanion =
         MonkeyMapper.mapFromDto(monkeyDto);
 

@@ -12,12 +12,15 @@ abstract class DioRemoteDatasource {
       Duration? sendTimeout,
       Duration? connectTimeout,
       Duration? receiveTimeout}) {
+    getLogger().d("Initializing Dio with baseUrl $baseUrl");
     dio = Dio(BaseOptions(
         baseUrl: baseUrl,
         headers: headers,
         sendTimeout: sendTimeout,
         connectTimeout: connectTimeout,
         receiveTimeout: receiveTimeout));
+
+    dio.httpClientAdapter = HttpClientAdapter();
 
     initializeInterceptors();
   }
@@ -42,9 +45,13 @@ abstract class DioRemoteDatasource {
   Future<Response<String>> performGet(String endPoint) async {
     Response<String> response;
 
+    getLogger()
+        .d("Performing get-Request with url ${dio.options.baseUrl}$endPoint");
+
     try {
       response = await dio.get(endPoint);
     } on DioException catch (e) {
+      getLogger().e("Dio had following error: $e");
       switch (e.type) {
         case DioExceptionType.connectionTimeout ||
               DioExceptionType.receiveTimeout ||

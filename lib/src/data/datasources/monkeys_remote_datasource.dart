@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show File, Platform;
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -11,15 +12,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 final monkeyRemoteDatasourceProvider = Provider.autoDispose
     .family<MonkeysRemoteDatasource, String>((ref, baseUrl) {
-  String fallbackUrl =
-      (kDebugMode && Platform.isAndroid) ? "http://10.0.2.2:8080/api/v1/" : "";
-
+  String fallbackUrl = "";
+  if (!kIsWeb) {
+    fallbackUrl = (kDebugMode && Platform.isAndroid)
+        ? "http://10.0.2.2:8080/api/v1/"
+        : "";
+  }
   return MonkeysRemoteDatasource(
       baseUrl: baseUrl != "" ? baseUrl : fallbackUrl);
 });
 
 class MonkeysRemoteDatasource extends DioRemoteDatasource {
-  static String get apiBaseUrl => "http://127.0.0.1/:8080/api/v1/";
+  static String get apiBaseUrl => "http://127.0.0.1:8080/api/v1/";
   static Duration get sendTimeout => const Duration(seconds: 2);
   static Duration get connectTimeout => const Duration(seconds: 10);
   static Duration get receiveTimeout => const Duration(seconds: 2);
@@ -36,6 +40,7 @@ class MonkeysRemoteDatasource extends DioRemoteDatasource {
     List<SingleSpecies> species = List.empty(growable: true);
 
     Response<String> response;
+
     try {
       response = await performGet("/monkeys");
       if (response.data == null) {
